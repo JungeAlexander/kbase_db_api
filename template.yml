@@ -1,0 +1,28 @@
+Resources:
+    FastapiExampleGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+    StageName: prod
+    OpenApiVersion: '3.0.0'
+   
+    FastapiExampleLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+    Events:
+    ApiEvent:
+    Properties:
+    RestApiId:
+    Ref: FastapiExampleGateway
+    Path: /{proxy+}
+    Method: ANY
+    Type: Api
+    FunctionName: fastapi-lambda-example
+    CodeUri: ./
+    Handler: db_api.main.handler
+    Runtime: python3.7
+    Timeout: 300 # timeout of your lambda function
+    MemorySize: 128 # memory size of your lambda function
+    Description: fastAPI aws lambda example
+    # other options, see -> docs
+    Role: !Sub arn:aws:iam::${AWS::AccountId}:role/fastapilambdarole
+   
