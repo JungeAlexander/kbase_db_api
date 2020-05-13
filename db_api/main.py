@@ -15,6 +15,7 @@ app = FastAPI(
     title="kbase article store",
     description="Retrieve, update, and recommend articles in kbase.",
     version="v1",
+    openapi_prefix="/Prod"
 )
 
 origins = ["http://localhost:8080", "http://localhost:8088"]
