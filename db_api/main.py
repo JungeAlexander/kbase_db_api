@@ -15,7 +15,7 @@ app = FastAPI(
     title="kbase article store",
     description="Retrieve, update, and recommend articles in kbase.",
     version="v1",
-    openapi_prefix="/Prod"
+    openapi_prefix="/prod",
 )
 
 origins = ["http://localhost:8080", "http://localhost:8088"]
@@ -50,47 +50,47 @@ def create_article(article: schemas.ArticleCreate, db: Session = Depends(get_db)
     return crud.create_article(db=db, article=article)
 
 
-def populate_example_articles():
-    with session_scope() as s:
-        a = schemas.ArticleBase(
-            id="ABC",
-            version="1",
-            source="arxiv",
-            journal="arxiv",
-            article_type=schemas.ArticleType.preprint,
-            title="TEST",
-            publication_date=date(2020, 2, 2),
-            update_date=date(2020, 2, 2),
-            link="",
-            doid="aefef",
-            summary="",
-            authors="",
-            affiliations="",
-            language="",
-            keywords="",
-            references="",
-        )
-        try:
-            create_article(a, db=s)
-        except HTTPException:
-            pass
-
-
-populate_example_articles()
+def generate_example_article():
+    a = schemas.Article(
+        id="ABC",
+        version="1",
+        source="arxiv",
+        journal="arxiv",
+        article_type=schemas.ArticleType.preprint,
+        title="TEST",
+        publication_date=date(2020, 2, 2),
+        update_date=date(2020, 2, 2),
+        modified_date=datetime(2020, 2, 2, 2),
+        link="",
+        doid="aefef",
+        summary="",
+        authors="",
+        affiliations="",
+        language="",
+        keywords="",
+        references="",
+        ratings=[]
+    )
+    return a
 
 
 @app.put("/articles/{article_id}", response_model=schemas.Article)
-def update_article(article_id: str, article: schemas.ArticleUpdate, db: Session = Depends(get_db)):
+def update_article(
+    article_id: str, article: schemas.ArticleUpdate, db: Session = Depends(get_db)
+):
     db_article = crud.get_article(db, article_id=article_id)
     if not db_article:
-        raise HTTPException(status_code=400, detail=f"Article with id {article_id} does not exist")
+        raise HTTPException(
+            status_code=400, detail=f"Article with id {article_id} does not exist"
+        )
     return crud.update_article(db=db, article=article)
 
 
 @app.get("/articles/", response_model=List[schemas.Article])
 def read_articles(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    articles = crud.get_articles(db, skip=skip, limit=limit)
-    return articles
+    a = generate_example_article()
+    # articles = crud.get_articles(db, skip=skip, limit=limit)
+    return [a]
 
 
 @app.get("/articles/{article_id}", response_model=schemas.Article)
@@ -105,7 +105,9 @@ def read_article(article_id: str, db: Session = Depends(get_db)):
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
-        raise HTTPException(status_code=400, detail=f"Email {user.email} already registered.")
+        raise HTTPException(
+            status_code=400, detail=f"Email {user.email} already registered."
+        )
     return crud.create_user(db=db, user=user)
 
 
@@ -131,17 +133,22 @@ def update_user(user_id: int, user: schemas.UserUpdate, db: Session = Depends(ge
     return crud.update_user(db, user)
 
 
-@app.get("/users/{user_id}/user_ratings/{article_id}", response_model=schemas.UserRating)
+@app.get(
+    "/users/{user_id}/user_ratings/{article_id}", response_model=schemas.UserRating
+)
 def get_rating_for_user(user_id: int, article_id: str, db: Session = Depends(get_db)):
     db_rating = crud.get_user_rating_by_article_and_user(db, article_id, user_id)
     if db_rating is None:
         raise HTTPException(
-            status_code=404, detail=f"User ID {user_id} has no rating for article ID {article_id}."
+            status_code=404,
+            detail=f"User ID {user_id} has no rating for article ID {article_id}.",
         )
     return db_rating
 
 
-@app.put("/users/{user_id}/user_ratings/{article_id}", response_model=schemas.UserRating)
+@app.put(
+    "/users/{user_id}/user_ratings/{article_id}", response_model=schemas.UserRating
+)
 def update_rating_for_user(
     user_id: int,
     article_id: str,
@@ -151,7 +158,8 @@ def update_rating_for_user(
     db_rating = crud.get_user_rating_by_article_and_user(db, article_id, user_id)
     if db_rating is None:
         raise HTTPException(
-            status_code=404, detail=f"User ID {user_id} has no rating for article ID {article_id}."
+            status_code=404,
+            detail=f"User ID {user_id} has no rating for article ID {article_id}.",
         )
     new_user_rating = schemas.UserRating(
         id=db_rating.id,
@@ -170,7 +178,9 @@ def read_user_ratings(skip: int = 0, limit: int = 100, db: Session = Depends(get
 
 
 @app.post("/user_ratings/", response_model=schemas.UserRating)
-def create_rating_for_user(user_rating: schemas.UserRatingCreate, db: Session = Depends(get_db)):
+def create_rating_for_user(
+    user_rating: schemas.UserRatingCreate, db: Session = Depends(get_db)
+):
     article_id = user_rating.article_id
     user_id = user_rating.user_id
     db_user_rating = crud.get_user_rating_by_article_and_user(db, article_id, user_id)
