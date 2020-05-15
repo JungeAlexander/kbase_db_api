@@ -1,2 +1,5 @@
+.aws-sam/
+out.yml
+.venv/
 .vscode/
 __pycache__/
