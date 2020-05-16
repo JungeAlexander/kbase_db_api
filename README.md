@@ -1,6 +1,1 @@
-# DB API
-
-```
-docker build -t db_api:latest .
-docker run -p 80:80 -e MAX_WORKERS="1" db_api:latest
-```
+Deploying fastAPI to AWS Lambda via Amazon API Gateway. See this [post](https://www.alexanderjunge.net/blog/fastapi-aws-api-gateway/).
