@@ -88,9 +88,8 @@ def update_article(
 
 @app.get("/articles/", response_model=List[schemas.Article])
 def read_articles(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    a = generate_example_article()
-    # articles = crud.get_articles(db, skip=skip, limit=limit)
-    return [a]
+    articles = crud.get_articles(db, skip=skip, limit=limit)
+    return articles
 
 
 @app.get("/articles/{article_id}", response_model=schemas.Article)
