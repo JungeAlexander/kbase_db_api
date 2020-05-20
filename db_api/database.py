@@ -1,6 +1,7 @@
 from contextlib import contextmanager
 import os
 
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
@@ -16,11 +17,18 @@ def global_init():
     if SessionLocal:
         return
 
-    SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
+    folder = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    load_dotenv(os.path.join(folder, "aws.env"))
 
-    engine = create_engine(
-        SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
-    )
+    host = os.environ["HOST"]
+    port = os.environ["PORT"]
+    dbname = os.environ["DBNAME"]
+    user = os.environ["USER"]
+    password = os.environ["PASSWORD"]
+
+    SQLALCHEMY_DATABASE_URL = f"postgresql://{user}:{password}@{host}:{port}/{dbname}"
+
+    engine = create_engine(SQLALCHEMY_DATABASE_URL)
     SessionLocal = sessionmaker(bind=engine)
 
     # noinspection PyUnresolvedReferences
