@@ -18,7 +18,11 @@ app = FastAPI(
     openapi_prefix="/prod",
 )
 
-origins = ["http://localhost:8080", "http://localhost:8088"]
+origins = [
+    "http://localhost:8080",
+    "http://localhost:8088",
+    "http://app-kbase-ajs-aws.s3-website-eu-west-1.amazonaws.com",
+]
 
 app.add_middleware(
     CORSMiddleware,
@@ -69,7 +73,7 @@ def generate_example_article():
         language="",
         keywords="",
         references="",
-        ratings=[]
+        ratings=[],
     )
     return a
 
