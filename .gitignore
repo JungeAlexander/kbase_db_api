@@ -5,3 +5,4 @@ out.yml
 __pycache__/
 *.env
 data/cord/metadata.csv
+.python-version
