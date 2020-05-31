@@ -23,8 +23,8 @@ def global_init():
     host = os.environ["HOST"]
     port = os.environ["PORT"]
     dbname = os.environ["DBNAME"]
-    user = os.environ["USER"]
-    password = os.environ["PASSWORD"]
+    user = os.environ["DBUSER"]
+    password = os.environ["DBPASSWORD"]
 
     SQLALCHEMY_DATABASE_URL = f"postgresql://{user}:{password}@{host}:{port}/{dbname}"
 
