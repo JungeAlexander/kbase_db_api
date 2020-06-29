@@ -47,12 +47,12 @@ class ArticleBase(BaseModel):
     doi: str = ""
     summary: str = ""
     full_text: str = ""
-    authors: str = ""
-    affiliations: str = ""
+    authors: List[str] = []
+    affiliations: List[str] = []
     language: str = ""
-    keywords: str = ""
-    references: str = ""
-    tags: str = ""
+    keywords: List[str] = []
+    references: List[str] = []
+    tags: List[str] = []
 
 
 class ArticleCreate(ArticleBase):

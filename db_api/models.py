@@ -2,6 +2,7 @@ from datetime import date, datetime
 from typing import List
 
 import sqlalchemy as sa
+from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import relationship
 
 from .database import SqlAlchemyBase
@@ -24,12 +25,12 @@ class Article(SqlAlchemyBase):
     doi: str = sa.Column(sa.String)
     summary: str = sa.Column(sa.String)
     full_text: str = sa.Column(sa.String)
-    authors: List[str] = sa.Column(sa.String)
-    affiliations: List[str] = sa.Column(sa.String)
+    authors: List[str] = sa.Column(ARRAY(sa.String, dimensions=1))
+    affiliations: List[str] = sa.Column(ARRAY(sa.String, dimensions=1))
     language: str = sa.Column(sa.String)
-    keywords: List[str] = sa.Column(sa.String)
-    references: List[str] = sa.Column(sa.String)
-    tags: List[str] = sa.Column(sa.String)
+    keywords: List[str] = sa.Column(ARRAY(sa.String, dimensions=1))
+    references: List[str] = sa.Column(ARRAY(sa.String, dimensions=1))
+    tags: List[str] = sa.Column(ARRAY(sa.String, dimensions=1))
 
     ratings = relationship("UserRating", back_populates="rated_article")
 
