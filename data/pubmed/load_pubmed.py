@@ -12,6 +12,10 @@ from db_api.database import global_init, session_scope
 
 
 def main():
+    # TODO work with one example file
+    # TODO make references a self-reference? https://docs.sqlalchemy.org/en/13/orm/self_referential.html
+    # TODO model tags in DB?
+    # TODO handle delete citations
     pass
 
 
