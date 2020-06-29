@@ -44,7 +44,7 @@ class ArticleBase(BaseModel):
     update_date: date
     link: str
     pmid: int = -1
-    doid: str = ""
+    doi: str = ""
     summary: str = ""
     full_text: str = ""
     authors: str = ""
@@ -52,6 +52,7 @@ class ArticleBase(BaseModel):
     language: str = ""
     keywords: str = ""
     references: str = ""
+    tags: str = ""
 
 
 class ArticleCreate(ArticleBase):

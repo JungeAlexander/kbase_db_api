@@ -18,10 +18,10 @@ class Article(SqlAlchemyBase):
     title: str = sa.Column(sa.String)
     publication_date: date = sa.Column(sa.Date, index=True)
     update_date: date = sa.Column(sa.Date, index=True)
-    modified_date = sa.Column(sa.DateTime, default=datetime.now, index=True)
+    modified_date: datetime = sa.Column(sa.DateTime, default=datetime.now, index=True)
     link: str = sa.Column(sa.String)
     pmid: int = sa.Column(sa.Integer)
-    doid: str = sa.Column(sa.String)
+    doi: str = sa.Column(sa.String)
     summary: str = sa.Column(sa.String)
     full_text: str = sa.Column(sa.String)
     authors: List[str] = sa.Column(sa.String)
@@ -29,6 +29,7 @@ class Article(SqlAlchemyBase):
     language: str = sa.Column(sa.String)
     keywords: List[str] = sa.Column(sa.String)
     references: List[str] = sa.Column(sa.String)
+    tags: List[str] = sa.Column(sa.String)
 
     ratings = relationship("UserRating", back_populates="rated_article")
 
