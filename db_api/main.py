@@ -54,30 +54,6 @@ def create_article(article: schemas.ArticleCreate, db: Session = Depends(get_db)
     return crud.create_article(db=db, article=article)
 
 
-def generate_example_article():
-    a = schemas.Article(
-        id="ABC",
-        version="1",
-        source="arxiv",
-        journal="arxiv",
-        article_type=schemas.ArticleType.preprint,
-        title="TEST",
-        publication_date=date(2020, 2, 2),
-        update_date=date(2020, 2, 2),
-        modified_date=datetime(2020, 2, 2, 2),
-        link="",
-        doid="aefef",
-        summary="",
-        authors="",
-        affiliations="",
-        language="",
-        keywords="",
-        references="",
-        ratings=[],
-    )
-    return a
-
-
 @app.put("/articles/{article_id}", response_model=schemas.Article)
 def update_article(
     article_id: str, article: schemas.ArticleUpdate, db: Session = Depends(get_db)
