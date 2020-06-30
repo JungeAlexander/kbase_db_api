@@ -14,11 +14,10 @@ from db_api.database import global_init, session_scope
 
 
 def main(psql=False):
-    global_init()
     input_file_path = "pubmed20n0477.xml.gz"
 
     article_dicts = pp.parse_medline_xml(
-        input_file_path, year_info_only=False, author_list=True, reference_list=True
+        input_file_path, year_info_only=False, author_list=False, reference_list=True
     )
 
     for ad in article_dicts:
@@ -51,6 +50,7 @@ def main(psql=False):
         article.references = ad["references"]
         article.tags = [x.strip() for k in ["mesh_terms", "publication_types", "chemical_list"] for x in ad[k].split(";") if x != ""]
 
+    # TODO global_init()
     # with session_scope as sess:
     #     pass
 
