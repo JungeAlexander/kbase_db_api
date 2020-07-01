@@ -16,7 +16,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 def main(psql=True):
-    input_file_path = "pubmed20n0477.xml.gz"
+    input_file_path = "pubmed20n0340.xml.gz"
 
     logging.info(f"Processing articles from {input_file_path}.")
     article_dicts = pp.parse_medline_xml(
@@ -25,7 +25,7 @@ def main(psql=True):
     logging.info(f"Loaded articles from {input_file_path}.")
 
     global_init()
-    with session_scope as sess:
+    with session_scope() as sess:
         for ad in article_dicts:
             logging.info(f"Processing article {ad['pmid']}.")
             article = Article()
