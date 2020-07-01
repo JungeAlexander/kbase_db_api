@@ -1,7 +1,6 @@
-import csv
 from datetime import date, datetime
+import logging
 import os
-from pprint import pprint
 import sys
 
 import pubmed_parser as pp
@@ -13,16 +12,22 @@ from db_api.models import Article
 from db_api.database import global_init, session_scope
 
 
+logging.basicConfig(level=logging.INFO)
+
+
 def main(psql=True):
     input_file_path = "pubmed20n0477.xml.gz"
 
+    logging.info(f"Processing articles from {input_file_path}.")
     article_dicts = pp.parse_medline_xml(
         input_file_path, year_info_only=False, author_list=False, reference_list=True
     )
+    logging.info(f"Loaded articles from {input_file_path}.")
 
     global_init()
     with session_scope as sess:
         for ad in article_dicts:
+            logging.info(f"Processing article {ad['pmid']}.")
             article = Article()
             article.id = "PMID:" + ad["pmid"]
             article.version = "v1"
@@ -50,7 +55,12 @@ def main(psql=True):
             article.language = ""
             article.keywords = [x.strip() for x in ad["keywords"].split(";") if x != ""]
             article.references = ad["references"]
-            article.tags = [x.strip() for k in ["mesh_terms", "publication_types", "chemical_list"] for x in ad[k].split(";") if x != ""]
+            article.tags = [
+                x.strip()
+                for k in ["mesh_terms", "publication_types", "chemical_list"]
+                for x in ad[k].split(";")
+                if x != ""
+            ]
             if psql:
                 sess.add(article)
 
