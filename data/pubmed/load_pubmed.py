@@ -25,43 +25,43 @@ def main(psql=True):
     logging.info(f"Loaded articles from {input_file_path}.")
 
     global_init()
-    with session_scope() as sess:
-        for ad in article_dicts:
-            logging.info(f"Processing article {ad['pmid']}.")
-            article = Article()
-            article.id = "PMID:" + ad["pmid"]
-            article.version = "v1"
-            article.source = "PubMed"
-            article.journal = ad["journal"]
-            article.article_type = "postprint"
-            article.title = ad["title"]
-            pubdate = ad["pubdate"]
-            pubdate_dashes = pubdate.count("-")
-            if pubdate_dashes == 2:  # format of parsed pubdate is YYYY-MM-DD
-                article.publication_date = date.fromisoformat(pubdate)
-            elif pubdate_dashes == 1:  # format of parsed pubdate is YYYY-MM
-                article.publication_date = date.fromisoformat(pubdate + "-01")
-            else:  # format of parsed pubdate is YYYY
-                article.publication_date = date.fromisoformat(pubdate + "-01-01")
-            article.update_date = date.today()
-            article.modified_date = datetime.now()
-            article.link = "https://pubmed.ncbi.nlm.nih.gov/" + ad["pmid"]
-            article.pmid = ad["pmid"]
-            article.doi = ad["doi"]
-            article.summary = ad["abstract"]
-            article.full_text = ""
-            article.authors = [x.strip() for x in ad["authors"].split(";") if x != ""]
-            article.affiliations = [ad["affiliations"]]
-            article.language = ""
-            article.keywords = [x.strip() for x in ad["keywords"].split(";") if x != ""]
-            article.references = ad["references"]
-            article.tags = [
-                x.strip()
-                for k in ["mesh_terms", "publication_types", "chemical_list"]
-                for x in ad[k].split(";")
-                if x != ""
-            ]
-            if psql:
+    for ad in article_dicts:
+        logging.info(f"Processing article {ad['pmid']}.")
+        article = Article()
+        article.id = "PMID:" + ad["pmid"]
+        article.version = "v1"
+        article.source = "PubMed"
+        article.journal = ad["journal"]
+        article.article_type = "postprint"
+        article.title = ad["title"]
+        pubdate = ad["pubdate"]
+        pubdate_dashes = pubdate.count("-")
+        if pubdate_dashes == 2:  # format of parsed pubdate is YYYY-MM-DD
+            article.publication_date = date.fromisoformat(pubdate)
+        elif pubdate_dashes == 1:  # format of parsed pubdate is YYYY-MM
+            article.publication_date = date.fromisoformat(pubdate + "-01")
+        else:  # format of parsed pubdate is YYYY
+            article.publication_date = date.fromisoformat(pubdate + "-01-01")
+        article.update_date = date.today()
+        article.modified_date = datetime.now()
+        article.link = "https://pubmed.ncbi.nlm.nih.gov/" + ad["pmid"]
+        article.pmid = ad["pmid"]
+        article.doi = ad["doi"]
+        article.summary = ad["abstract"]
+        article.full_text = ""
+        article.authors = [x.strip() for x in ad["authors"].split(";") if x != ""]
+        article.affiliations = [ad["affiliations"]]
+        article.language = ""
+        article.keywords = [x.strip() for x in ad["keywords"].split(";") if x != ""]
+        article.references = ad["references"]
+        article.tags = [
+            x.strip()
+            for k in ["mesh_terms", "publication_types", "chemical_list"]
+            for x in ad[k].split(";")
+            if x != ""
+        ]
+        if psql:
+            with session_scope() as sess:  # TODO move to outer for loop
                 sess.add(article)
 
     # TODO make references a self-reference? https://docs.sqlalchemy.org/en/13/orm/self_referential.html
