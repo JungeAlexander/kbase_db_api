@@ -16,7 +16,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 def main(psql=True):
-    input_file_path = "pubmed20n0340.xml.gz"
+    input_file_path = "data/pubmed/pubmed20n0340.xml.gz"
 
     logging.info(f"Processing articles from {input_file_path}.")
     article_dicts = pp.parse_medline_xml(
