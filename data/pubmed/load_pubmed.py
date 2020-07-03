@@ -53,7 +53,7 @@ def main(psql=True):
         article.affiliations = [ad["affiliations"]]
         article.language = ""
         article.keywords = [x.strip() for x in ad["keywords"].split(";") if x != ""]
-        article.references = ad["references"]
+        article.references = [r["pmid"] for r in ad["references"]]
         article.tags = [
             x.strip()
             for k in ["mesh_terms", "publication_types", "chemical_list"]
