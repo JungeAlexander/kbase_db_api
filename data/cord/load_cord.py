@@ -15,14 +15,14 @@ from db_api.database import global_init, session_scope
 
 
 def main(
-    cord_archive: Path,
+    cord_metadata_file: Path,   
     start_date: datetime = datetime(1900, 1, 1),
     s3: bool = False,
     psql: bool = True,
 ):
     global_init()
     s3_client = boto3.client("s3")
-    with open("metadata.csv", newline="") as csvfile, session_scope() as sess:
+    with open(cord_metadata_file, newline="") as csvfile, session_scope() as sess:
         reader = csv.DictReader(csvfile)
         ids_added = set()
         for i, row in enumerate(reader):
