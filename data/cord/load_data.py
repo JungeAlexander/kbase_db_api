@@ -1,10 +1,12 @@
 import csv
 from datetime import date, datetime
+from pathlib import Path
 import os
 from pprint import pprint
 import sys
 
 import boto3
+import typer
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
@@ -12,9 +14,14 @@ from db_api.models import Article
 from db_api.database import global_init, session_scope
 
 
-def main(start_date, s3=False, psql=True):
+def main(
+    cord_archive: Path,
+    start_date: datetime = datetime(1900, 1, 1),
+    s3: bool = False,
+    psql: bool = True,
+):
     global_init()
-    s3_client = boto3.client('s3')
+    s3_client = boto3.client("s3")
     with open("metadata.csv", newline="") as csvfile, session_scope() as sess:
         reader = csv.DictReader(csvfile)
         ids_added = set()
@@ -48,7 +55,7 @@ def main(start_date, s3=False, psql=True):
                 article.pmid = int(pmid)
             except ValueError:
                 article.pmid = 0
-            article.doid = row.get("doi", "")
+            article.doi = row.get("doi", "")
             article.summary = row.get("abstract", "")
             article.full_text = ""
             article.authors = [x.strip() for x in row["authors"].split(";")]
@@ -56,6 +63,7 @@ def main(start_date, s3=False, psql=True):
             article.language = ""
             article.keywords = []
             article.references = []
+            article.tags = []
             if publish_date_parsed and publish_date_parsed > start_date:
                 if s3:
                     fname = f"{article.id}.tsv"
@@ -72,4 +80,4 @@ def main(start_date, s3=False, psql=True):
 
 
 if __name__ == "__main__":
-    main(start_date=date.fromisoformat("2020-01-01"))
+    typer.run(main)
