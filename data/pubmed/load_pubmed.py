@@ -64,10 +64,12 @@ def main(psql=True):
             with session_scope() as sess:  # TODO move to outer for loop
                 sess.add(article)
 
-    # TODO make references a self-reference? https://docs.sqlalchemy.org/en/13/orm/self_referential.html
-    # TODO model tags in DB tables?
+
     # TODO handle delete citations
     # TODO make sure newest is always used first
+    # TODO process 2020 baseline
+    # TODO make references a self-reference? https://docs.sqlalchemy.org/en/13/orm/self_referential.html
+    # TODO model tags in DB tables?
 
 
 if __name__ == "__main__":
