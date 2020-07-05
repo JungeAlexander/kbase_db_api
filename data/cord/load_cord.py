@@ -16,7 +16,7 @@ from db_api.database import global_init, session_scope
 
 def main(
     cord_metadata_file: Path,   
-    start_date: datetime = datetime(1900, 1, 1),
+    start_date: datetime = "1900-01-01",
     s3: bool = False,
     psql: bool = True,
 ):
@@ -64,7 +64,7 @@ def main(
             article.keywords = []
             article.references = []
             article.tags = []
-            if publish_date_parsed and publish_date_parsed > start_date:
+            if publish_date_parsed and datetime.combine(publish_date_parsed, datetime.min.time()) > start_date:
                 if s3:
                     fname = f"{article.id}.tsv"
                     with open(fname, "w") as f:

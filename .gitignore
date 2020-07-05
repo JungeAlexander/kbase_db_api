@@ -9,3 +9,7 @@ data/pubmed/*.xml.gz
 data/pubmed/*.xml.gz.md5
 data/pubmed/load_pubmed.err
 data/pubmed/load_pubmed.out
+data/cord/cord-19_2020-07-04.tar.gz
+data/cord/load_cord.err
+data/cord/load_cord.out
+data/cord/**/*.csv
