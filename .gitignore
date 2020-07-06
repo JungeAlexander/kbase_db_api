@@ -10,3 +10,7 @@ data/pubmed/*.xml.gz.md5
 data/pubmed/load_pubmed.err
 data/pubmed/load_pubmed.out
 results/20200706-cord-github/github_articles.json
+data/cord/cord-19_2020-07-04.tar.gz
+data/cord/load_cord.err
+data/cord/load_cord.out
+data/cord/**/*.csv
