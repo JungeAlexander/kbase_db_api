@@ -32,7 +32,7 @@ def search_article_sumary(
     db: Session, query: str = "query"
 ) -> Iterable[models.Article]:
     search = "%{}%".format(query)
-    articles = models.Article.query.filter(models.Article.summary.ilike(search)).all()
+    articles = db.query(models.Article).filter(models.Article.summary.ilike(search)).all()
     return articles
 
 
