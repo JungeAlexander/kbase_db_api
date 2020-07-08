@@ -28,6 +28,14 @@ def get_articles(
     return db.query(models.Article).offset(skip).limit(limit).all()
 
 
+def search_article_sumary(
+    db: Session, query: str = "query"
+) -> Iterable[models.Article]:
+    search = "%{}%".format(query)
+    articles = models.Article.query.filter(models.Article.summary.ilike(search)).all()
+    return articles
+
+
 def create_article(db: Session, article: schemas.ArticleCreate) -> models.Article:
     db_article = models.Article(**article.dict())
     db.add(db_article)

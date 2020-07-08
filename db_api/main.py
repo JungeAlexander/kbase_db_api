@@ -72,6 +72,12 @@ def read_articles(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
     return articles
 
 
+@app.get("/articles/search_summary", response_model=List[schemas.Article])
+def search_article_sumary(query: str = "query", db: Session = Depends(get_db)):
+    articles = crud.search_article_sumary(db, query=query)
+    return articles
+
+
 @app.get("/articles/{article_id}", response_model=schemas.Article)
 def read_article(article_id: str, db: Session = Depends(get_db)):
     db_article = crud.get_article(db, article_id=article_id)
