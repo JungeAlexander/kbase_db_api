@@ -1,21 +1,21 @@
 import csv
+import os
+import sys
 from datetime import date, datetime
 from pathlib import Path
-import os
 from pprint import pprint
-import sys
 
 import boto3
 import typer
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
-from db_api.models import Article
 from db_api.database import global_init, session_scope
+from db_api.models import Article
 
 
 def main(
-    cord_metadata_file: Path,   
+    cord_metadata_file: Path,
     start_date: datetime = "1900-01-01",
     s3: bool = False,
     psql: bool = True,
@@ -64,7 +64,11 @@ def main(
             article.keywords = []
             article.references = []
             article.tags = []
-            if publish_date_parsed and datetime.combine(publish_date_parsed, datetime.min.time()) > start_date:
+            if (
+                publish_date_parsed
+                and datetime.combine(publish_date_parsed, datetime.min.time())
+                > start_date
+            ):
                 if s3:
                     fname = f"{article.id}.tsv"
                     with open(fname, "w") as f:
