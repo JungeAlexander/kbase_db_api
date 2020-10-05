@@ -14,3 +14,4 @@ data/cord/cord-19_2020-07-04.tar.gz
 data/cord/load_cord.err
 data/cord/load_cord.out
 data/cord/**/*.csv
+fastapi_test/
