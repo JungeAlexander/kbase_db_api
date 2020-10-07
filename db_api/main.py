@@ -12,8 +12,8 @@ from .database import create_session, global_init
 global_init()
 
 app = FastAPI(
-    title="kbase article store",
-    description="Retrieve, update, and recommend articles in kbase.",
+    title="kbase document store",
+    description="Retrieve, update, and recommend documents in kbase.",
     version="v1",
     openapi_prefix="/prod",
 )
@@ -43,47 +43,47 @@ def get_db():
         db.close()
 
 
-@app.post("/articles/", response_model=schemas.Article)
-def create_article(article: schemas.ArticleCreate, db: Session = Depends(get_db)):
-    article_id = article.id
-    db_article = crud.get_article(db, article_id=article_id)
-    if db_article:
+@app.post("/documents/", response_model=schemas.Document)
+def create_document(document: schemas.DocumentCreate, db: Session = Depends(get_db)):
+    document_id = document.id
+    db_document = crud.get_document(db, document_id=document_id)
+    if db_document:
         raise HTTPException(
-            status_code=400, detail=f"Article with id {article_id} already registered"
+            status_code=400, detail=f"Document with id {document_id} already registered"
         )
-    return crud.create_article(db=db, article=article)
+    return crud.create_document(db=db, document=document)
 
 
-@app.put("/articles/{article_id}", response_model=schemas.Article)
-def update_article(
-    article_id: str, article: schemas.ArticleUpdate, db: Session = Depends(get_db)
+@app.put("/documents/{document_id}", response_model=schemas.Document)
+def update_document(
+    document_id: str, document: schemas.DocumentUpdate, db: Session = Depends(get_db)
 ):
-    db_article = crud.get_article(db, article_id=article_id)
-    if not db_article:
+    db_document = crud.get_document(db, document_id=document_id)
+    if not db_document:
         raise HTTPException(
-            status_code=400, detail=f"Article with id {article_id} does not exist"
+            status_code=400, detail=f"Document with id {document_id} does not exist"
         )
-    return crud.update_article(db=db, article=article)
+    return crud.update_document(db=db, document=document)
 
 
-@app.get("/articles/", response_model=List[schemas.Article])
-def read_articles(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    articles = crud.get_articles(db, skip=skip, limit=limit)
-    return articles
+@app.get("/documents/", response_model=List[schemas.Document])
+def read_documents(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    documents = crud.get_documents(db, skip=skip, limit=limit)
+    return documents
 
 
-@app.get("/articles/search_summary", response_model=List[schemas.Article])
-def search_article_sumary(query: str = "query", db: Session = Depends(get_db)):
-    articles = crud.search_article_sumary(db, query=query)
-    return articles
+@app.get("/documents/search_summary", response_model=List[schemas.Document])
+def search_document_sumary(query: str = "query", db: Session = Depends(get_db)):
+    documents = crud.search_document_sumary(db, query=query)
+    return documents
 
 
-@app.get("/articles/{article_id}", response_model=schemas.Article)
-def read_article(article_id: str, db: Session = Depends(get_db)):
-    db_article = crud.get_article(db, article_id=article_id)
-    if db_article is None:
-        raise HTTPException(status_code=404, detail="Article not found")
-    return db_article
+@app.get("/documents/{document_id}", response_model=schemas.Document)
+def read_document(document_id: str, db: Session = Depends(get_db)):
+    db_document = crud.get_document(db, document_id=document_id)
+    if db_document is None:
+        raise HTTPException(status_code=404, detail="Document not found")
+    return db_document
 
 
 @app.post("/users/", response_model=schemas.User)
@@ -119,37 +119,37 @@ def update_user(user_id: int, user: schemas.UserUpdate, db: Session = Depends(ge
 
 
 @app.get(
-    "/users/{user_id}/user_ratings/{article_id}", response_model=schemas.UserRating
+    "/users/{user_id}/user_ratings/{document_id}", response_model=schemas.UserRating
 )
-def get_rating_for_user(user_id: int, article_id: str, db: Session = Depends(get_db)):
-    db_rating = crud.get_user_rating_by_article_and_user(db, article_id, user_id)
+def get_rating_for_user(user_id: int, document_id: str, db: Session = Depends(get_db)):
+    db_rating = crud.get_user_rating_by_document_and_user(db, document_id, user_id)
     if db_rating is None:
         raise HTTPException(
             status_code=404,
-            detail=f"User ID {user_id} has no rating for article ID {article_id}.",
+            detail=f"User ID {user_id} has no rating for document ID {document_id}.",
         )
     return db_rating
 
 
 @app.put(
-    "/users/{user_id}/user_ratings/{article_id}", response_model=schemas.UserRating
+    "/users/{user_id}/user_ratings/{document_id}", response_model=schemas.UserRating
 )
 def update_rating_for_user(
     user_id: int,
-    article_id: str,
+    document_id: str,
     user_rating: schemas.UserRatingUpdate,
     db: Session = Depends(get_db),
 ):
-    db_rating = crud.get_user_rating_by_article_and_user(db, article_id, user_id)
+    db_rating = crud.get_user_rating_by_document_and_user(db, document_id, user_id)
     if db_rating is None:
         raise HTTPException(
             status_code=404,
-            detail=f"User ID {user_id} has no rating for article ID {article_id}.",
+            detail=f"User ID {user_id} has no rating for document ID {document_id}.",
         )
     new_user_rating = schemas.UserRating(
         id=db_rating.id,
         user_id=user_id,
-        article_id=article_id,
+        document_id=document_id,
         value=user_rating.value,
         modified_date=datetime.now(),
     )
@@ -166,13 +166,13 @@ def read_user_ratings(skip: int = 0, limit: int = 100, db: Session = Depends(get
 def create_rating_for_user(
     user_rating: schemas.UserRatingCreate, db: Session = Depends(get_db)
 ):
-    article_id = user_rating.article_id
+    document_id = user_rating.document_id
     user_id = user_rating.user_id
-    db_user_rating = crud.get_user_rating_by_article_and_user(db, article_id, user_id)
+    db_user_rating = crud.get_user_rating_by_document_and_user(db, document_id, user_id)
     if db_user_rating:
         raise HTTPException(
             status_code=400,
-            detail=f"Rating for article id {article_id} by user id {user_id} already registered",
+            detail=f"Rating for document id {document_id} by user id {user_id} already registered",
         )
     return crud.create_user_rating(db=db, user_rating=user_rating)
 

@@ -8,14 +8,14 @@ from sqlalchemy.orm import relationship
 from .database import SqlAlchemyBase
 
 
-class Article(SqlAlchemyBase):
-    __tablename__ = "articles"
+class Document(SqlAlchemyBase):
+    __tablename__ = "documents"
 
     id: str = sa.Column(sa.String, primary_key=True, index=True)
     version: str = sa.Column(sa.String)
     source: str = sa.Column(sa.String)
     journal: str = sa.Column(sa.String)
-    article_type: str = sa.Column(sa.String)
+    document_type: str = sa.Column(sa.String)
     title: str = sa.Column(sa.String)
     publication_date: date = sa.Column(sa.Date, index=True)
     update_date: date = sa.Column(sa.Date, index=True)
@@ -35,7 +35,7 @@ class Article(SqlAlchemyBase):
     tags: List[str] = sa.Column(ARRAY(sa.String, dimensions=1))
     other_ids: List[str] = sa.Column(ARRAY(sa.String, dimensions=1))
 
-    ratings = relationship("UserRating", back_populates="rated_article")
+    ratings = relationship("UserRating", back_populates="rated_document")
 
 
 class User(SqlAlchemyBase):
@@ -56,8 +56,8 @@ class UserRating(SqlAlchemyBase):
     __tablename__ = "user_ratings"
 
     id = sa.Column(sa.Integer, primary_key=True, index=True)
-    article_id = sa.Column(
-        sa.String, sa.ForeignKey("articles.id"), nullable=False, index=True
+    document_id = sa.Column(
+        sa.String, sa.ForeignKey("documents.id"), nullable=False, index=True
     )
     value = sa.Column(sa.Float, nullable=False)
     user_id = sa.Column(
@@ -66,4 +66,4 @@ class UserRating(SqlAlchemyBase):
     modified_date = sa.Column(sa.DateTime, default=datetime.now, index=True)
 
     rated_by = relationship("User", back_populates="ratings")
-    rated_article = relationship("Article", back_populates="ratings")
+    rated_document = relationship("Document", back_populates="ratings")

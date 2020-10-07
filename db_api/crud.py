@@ -4,55 +4,56 @@ from typing import Iterable
 from passlib.handlers.sha2_crypt import sha512_crypt
 from sqlalchemy.orm import Session
 
-from . import models
-from . import schemas
+from . import models, schemas
 
 
-def get_article(db: Session, article_id: str) -> models.Article:
-    return db.query(models.Article).filter(models.Article.id == article_id).first()
+def get_document(db: Session, document_id: str) -> models.Document:
+    return db.query(models.Document).filter(models.Document.id == document_id).first()
 
 
-def get_articles_by_publication_date(
-    db: Session, article_date: date
-) -> Iterable[models.Article]:
+def get_documents_by_publication_date(
+    db: Session, document_date: date
+) -> Iterable[models.Document]:
     return (
-        db.query(models.Article)
-        .filter(models.Article.publication_date == article_date)
+        db.query(models.Document)
+        .filter(models.Document.publication_date == document_date)
         .all()
     )
 
 
-def get_articles(
+def get_documents(
     db: Session, skip: int = 0, limit: int = 100
-) -> Iterable[models.Article]:
-    return db.query(models.Article).offset(skip).limit(limit).all()
+) -> Iterable[models.Document]:
+    return db.query(models.Document).offset(skip).limit(limit).all()
 
 
-def search_article_sumary(
+def search_document_sumary(
     db: Session, query: str = "query"
-) -> Iterable[models.Article]:
+) -> Iterable[models.Document]:
     search = "%{}%".format(query)
-    articles = db.query(models.Article).filter(models.Article.summary.ilike(search)).all()
-    return articles
+    documents = (
+        db.query(models.Document).filter(models.Document.summary.ilike(search)).all()
+    )
+    return documents
 
 
-def create_article(db: Session, article: schemas.ArticleCreate) -> models.Article:
-    db_article = models.Article(**article.dict())
-    db.add(db_article)
+def create_document(db: Session, document: schemas.DocumentCreate) -> models.Document:
+    db_document = models.Document(**document.dict())
+    db.add(db_document)
     db.commit()
-    db.refresh(db_article)
-    return db_article
+    db.refresh(db_document)
+    return db_document
 
 
-def update_article(db: Session, article: schemas.ArticleUpdate) -> models.Article:
+def update_document(db: Session, document: schemas.DocumentUpdate) -> models.Document:
     # TODO does not seem to update modified_date
-    new_article = models.Article(**article.dict())
-    old_article = get_article(db, new_article.id)
-    db.delete(old_article)
-    db.add(new_article)
+    new_document = models.Document(**document.dict())
+    old_document = get_document(db, new_document.id)
+    db.delete(old_document)
+    db.add(new_document)
     db.commit()
-    db.refresh(new_article)
-    return new_article
+    db.refresh(new_document)
+    return new_document
 
 
 def get_hash(text: str) -> str:
@@ -133,23 +134,23 @@ def get_user_ratings_by_user(db: Session, user_id: int) -> Iterable[models.UserR
     )
 
 
-def get_user_ratings_by_article(
-    db: Session, article_id: str
+def get_user_ratings_by_document(
+    db: Session, document_id: str
 ) -> Iterable[models.UserRating]:
     return (
         db.query(models.UserRating)
-        .filter(models.UserRating.article_id == article_id)
+        .filter(models.UserRating.document_id == document_id)
         .all()
     )
 
 
-def get_user_rating_by_article_and_user(
-    db: Session, article_id: str, user_id: int
+def get_user_rating_by_document_and_user(
+    db: Session, document_id: str, user_id: int
 ) -> models.UserRating:
     return (
         db.query(models.UserRating)
         .filter(
-            (models.UserRating.article_id == article_id)
+            (models.UserRating.document_id == document_id)
             & (models.UserRating.user_id == user_id)
         )
         .first()

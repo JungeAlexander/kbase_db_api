@@ -10,7 +10,7 @@ class UserRatingBase(BaseModel):
 
 
 class UserRatingCreate(UserRatingBase):
-    article_id: str
+    document_id: str
     user_id: int
 
 
@@ -26,18 +26,18 @@ class UserRating(UserRatingCreate):
         orm_mode = True
 
 
-class ArticleType(str, Enum):
+class DocumentType(str, Enum):
     preprint = "preprint"
     postprint = "postprint"
     proceeding = "proceeding"
 
 
-class ArticleBase(BaseModel):
+class DocumentBase(BaseModel):
     id: str
     version: str
     source: str
     journal: str
-    article_type: ArticleType
+    document_type: DocumentType
     title: str
     publication_date: date
     update_date: date
@@ -57,15 +57,15 @@ class ArticleBase(BaseModel):
     other_ids: List[str] = []
 
 
-class ArticleCreate(ArticleBase):
+class DocumentCreate(DocumentBase):
     pass
 
 
-class ArticleUpdate(ArticleBase):
+class DocumentUpdate(DocumentBase):
     pass
 
 
-class Article(ArticleBase):
+class Document(DocumentBase):
     modified_date: datetime
     ratings: List[UserRating] = []
 
