@@ -45,6 +45,7 @@ class DocumentBase(BaseModel):
     pmid: int = -1
     license: str = ""
     doi: str = ""
+    arxiv_id: str = ""
     summary: str = ""
     full_text: str = ""
     authors: List[str] = []

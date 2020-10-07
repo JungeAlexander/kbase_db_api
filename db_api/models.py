@@ -22,6 +22,7 @@ class Document(SqlAlchemyBase):
     modified_date: datetime = sa.Column(sa.DateTime, default=datetime.now, index=True)
     urls: str = sa.Column(ARRAY(sa.String, dimensions=1))
     pmid: int = sa.Column(sa.Integer)
+    arxiv_id: str = sa.Column(sa.Integer)
     license: str = sa.Column(sa.String)
     doi: str = sa.Column(sa.String)
     summary: str = sa.Column(sa.String)
