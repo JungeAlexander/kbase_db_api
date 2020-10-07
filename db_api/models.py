@@ -20,8 +20,9 @@ class Article(SqlAlchemyBase):
     publication_date: date = sa.Column(sa.Date, index=True)
     update_date: date = sa.Column(sa.Date, index=True)
     modified_date: datetime = sa.Column(sa.DateTime, default=datetime.now, index=True)
-    link: str = sa.Column(sa.String)
+    urls: str = sa.Column(ARRAY(sa.String, dimensions=1))
     pmid: int = sa.Column(sa.Integer)
+    license: str = sa.Column(sa.String)
     doi: str = sa.Column(sa.String)
     summary: str = sa.Column(sa.String)
     full_text: str = sa.Column(sa.String)
@@ -29,8 +30,10 @@ class Article(SqlAlchemyBase):
     affiliations: List[str] = sa.Column(ARRAY(sa.String, dimensions=1))
     language: str = sa.Column(sa.String)
     keywords: List[str] = sa.Column(ARRAY(sa.String, dimensions=1))
-    references: List[str] = sa.Column(ARRAY(sa.String, dimensions=1))
+    in_citations: List[str] = sa.Column(ARRAY(sa.String, dimensions=1))
+    out_citations: List[str] = sa.Column(ARRAY(sa.String, dimensions=1))
     tags: List[str] = sa.Column(ARRAY(sa.String, dimensions=1))
+    other_ids: List[str] = sa.Column(ARRAY(sa.String, dimensions=1))
 
     ratings = relationship("UserRating", back_populates="rated_article")
 

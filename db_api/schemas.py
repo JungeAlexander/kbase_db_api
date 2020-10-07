@@ -1,6 +1,5 @@
-from enum import Enum
-
 from datetime import date, datetime
+from enum import Enum
 from typing import List
 
 from pydantic import BaseModel, EmailStr
@@ -42,8 +41,9 @@ class ArticleBase(BaseModel):
     title: str
     publication_date: date
     update_date: date
-    link: str
+    urls: List[str]
     pmid: int = -1
+    license: str = ""
     doi: str = ""
     summary: str = ""
     full_text: str = ""
@@ -51,8 +51,10 @@ class ArticleBase(BaseModel):
     affiliations: List[str] = []
     language: str = ""
     keywords: List[str] = []
-    references: List[str] = []
+    in_citations: List[str] = []
+    out_citations: List[str] = []
     tags: List[str] = []
+    other_ids: List[str] = []
 
 
 class ArticleCreate(ArticleBase):
