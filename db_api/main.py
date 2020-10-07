@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import datetime
 from typing import List
 
 from fastapi import Depends, FastAPI, HTTPException
@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from starlette.middleware.cors import CORSMiddleware
 
 from . import crud, schemas
-from .database import create_session, global_init, session_scope
+from .database import create_session, global_init
 
 global_init()
 
