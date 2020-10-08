@@ -1,4 +1,4 @@
-- Load CORD - 100 articles
+- Load CORD - 200 articles
 - Set up local psql
 - Init alembic
 
