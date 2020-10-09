@@ -4,6 +4,7 @@ out.yml
 __pycache__/
 *.env
 data/cord/metadata.csv
+data/pgdata/
 .python-version
 data/pubmed/*.xml.gz
 data/pubmed/*.xml.gz.md5
