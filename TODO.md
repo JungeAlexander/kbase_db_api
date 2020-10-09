@@ -1,5 +1,4 @@
-- Load CORD - 200 articles
-- Set up local psql
+- Load CORD - 200 articles into local DB
 - Init alembic
 
 See Full Stack FastAPI and PostgreSQL - Base Project Generator:
