@@ -14,8 +14,8 @@ global_init()
 app = FastAPI(
     title="kbase document store",
     description="Retrieve, update, and recommend documents in kbase.",
-    version="v1",
-    openapi_prefix="/prod",
+    # version="v1",
+    # openapi_prefix="/prod",
 )
 
 origins = [
