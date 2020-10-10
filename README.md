@@ -27,6 +27,7 @@ https://github.com/tiangolo/full-stack-fastapi-postgresql
 ```
 #docker rm $(docker ps -a -q)
 #docker kill $(docker ps -a -q)
+#rm -rf data/pgdata
 docker run --name kbase-db -v /Users/alexanderjunge/Code/kbase/db_api/data/pgdata:/var/lib/postgresql/data -e POSTGRES_PASSWORD=mysecretpassword -p 10000:5432 -d postgres:13.0
 psql -h localhost -p 10000 -U postgres
 ```

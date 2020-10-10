@@ -13,10 +13,16 @@ from alembic import context
 config = context.config
 
 # this will overwrite the sqlalchemy.url path in alembic.ini
-folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
-load_dotenv(os.path.join(folder, "config", "shared_database.env"))
-password = os.environ["SHARED_PASSWORD"]
-url = f"postgresql://shareduser:{password}@localhost:8001/shared"
+folder = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+load_dotenv(os.path.join(folder, "db_api", "aws.env"))
+
+host = os.environ["HOST"]
+port = os.environ["PORT"]
+dbname = os.environ["DBNAME"]
+user = os.environ["DBUSER"]
+password = os.environ["DBPASSWORD"]
+
+url = f"postgresql://{user}:{password}@{host}:{port}/{dbname}"
 config.set_main_option("sqlalchemy.url", url)
 
 # Interpret the config file for Python logging.
@@ -29,7 +35,7 @@ fileConfig(config.config_file_name)
 # target_metadata = mymodel.Base.metadata
 folder = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, folder)
-from sql_app.database import SqlAlchemyBase, global_init
+from db_api.database import SqlAlchemyBase, global_init
 
 global_init()
 target_metadata = SqlAlchemyBase.metadata
