@@ -16,3 +16,4 @@ data/cord/load_cord.err
 data/cord/load_cord.out
 data/cord/**/*.csv
 fastapi_test/
+data/cord/load_cord_subset.err

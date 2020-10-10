@@ -67,14 +67,14 @@ def main(
             document.out_citations = []
             document.tags = []
             other_ids = []
-            if "pmcid" in row:
+            if "pmcid" in row and row["pmcid"].strip() != "":
                 pmcid = row["pmcid"]
                 if not pmcid.startswith("PMC"):
                     pmcid = "PMC" + pmcid
                 other_ids.append(pmcid)
-            if "who_covidence_id" in row:
+            if "who_covidence_id" in row and row["who_covidence_id"].strip() != "":
                 other_ids.append("WHO" + row["who_covidence_id"])
-            if "s2_id" in row:
+            if "s2_id" in row and row["s2_id"].strip() != "":
                 other_ids.append("S2" + row["s2_id"])
             document.other_ids = sorted(other_ids)
             if (
