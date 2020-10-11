@@ -3,7 +3,7 @@ Generic single-database configuration.
 # Run
 
 ```
-alembic revision --autogenerate -m "add embeddings table"
+alembic revision --autogenerate -m "Initial migration"
 ```
 
-Maybe adjust `SQLALCHEMY_DATABASE_URL` in `sql_app/database.py` when running alembic outside Docker container.
+Note: config assumes running alembic from outside docker container.

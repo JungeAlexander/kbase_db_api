@@ -14,7 +14,7 @@ config = context.config
 
 # this will overwrite the sqlalchemy.url path in alembic.ini
 folder = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-load_dotenv(os.path.join(folder, "db_api", "aws.env"))
+load_dotenv(os.path.join(folder, "aws.env"))
 
 host = os.environ["HOST"]
 port = os.environ["PORT"]
@@ -35,9 +35,9 @@ fileConfig(config.config_file_name)
 # target_metadata = mymodel.Base.metadata
 folder = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, folder)
-from db_api.database import SqlAlchemyBase, global_init
+from db_api.database import SqlAlchemyBase, setup
 
-global_init()
+_ = setup()
 target_metadata = SqlAlchemyBase.metadata
 
 # other values from the config, defined by the needs of env.py,
