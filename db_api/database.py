@@ -1,17 +1,17 @@
-from contextlib import contextmanager
 import os
+from contextlib import contextmanager
 
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm import Session, sessionmaker
 
 SqlAlchemyBase = declarative_base()
 
 SessionLocal = None
 
 
-def global_init():
+def setup():
     global SessionLocal
 
     if SessionLocal:
@@ -34,6 +34,13 @@ def global_init():
     # noinspection PyUnresolvedReferences
     from . import models
 
+    return engine
+
+
+def global_init():
+    engine = setup()
+    if engine is None:
+        return
     SqlAlchemyBase.metadata.create_all(engine)
 
 
