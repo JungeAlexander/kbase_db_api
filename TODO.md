@@ -1,4 +1,14 @@
-- Init alembic
+Pick scispacy annotation
+
+Figure out how to store scispacy annotation and versioning
+- dvc
+- MLflow
+
+Updated models
+  - add entity
+    - ID, name, synonyms
+  - add entity mention
+    - similar to user rating except we need possition
 
 See Full Stack FastAPI and PostgreSQL - Base Project Generator:
 https://github.com/tiangolo/full-stack-fastapi-postgresql
@@ -10,9 +20,3 @@ https://github.com/tiangolo/full-stack-fastapi-postgresql
 - authentication
 
 Setup in AWS
-
-Updated modelss
-  - add entity
-    - ID, name, synonyms
-  - add entity mention
-    - similar to user rating except we need possition
