@@ -1,4 +1,7 @@
 black==19.10b0
+en-ner-craft-md @ https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.2.5/en_ner_craft_md-0.2.5.tar.gz
 flake8==3.8.3
 jupyterlab==2.1.5
 pre-commit==2.7.1
+scispacy==0.2.5
+spacy==2.3.0
