@@ -23,6 +23,8 @@ https://github.com/tiangolo/full-stack-fastapi-postgresql
 - poetry setup
 - authentication
 
+CI/CD
+
 Setup in AWS
 
 Snorkel for weak labelling?

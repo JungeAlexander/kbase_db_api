@@ -98,19 +98,45 @@ class User(UserBase):
         orm_mode = True
 
 
-class MentionBase(BaseModel):
+class EntityBase(BaseModel):
     id: int
 
 
-class MentionCreate(MentionBase):
+class EntityCreate(EntityBase):
     pass
 
 
-class MentionUpdate(MentionBase):
+class EntityUpdate(EntityBase):
     pass
 
 
-class Mention(MentionBase):
+class Entity(EntityBase):
+    modified_date: datetime
+
+    class Config:
+        orm_mode = True
+
+
+class DocumentSection(str, Enum):
+    title = "title"
+    summary = "summary"
+    full_text = "full_text"
+
+
+class EntityMentionBase(BaseModel):
+    id: int
+    document_section: DocumentSection
+
+
+class EntityMentionCreate(EntityMentionBase):
+    pass
+
+
+class EntityMentionUpdate(EntityMentionBase):
+    pass
+
+
+class EntityMention(EntityMentionBase):
     modified_date: datetime
 
     class Config:
