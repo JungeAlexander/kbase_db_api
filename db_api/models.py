@@ -77,6 +77,8 @@ class Entity(SqlAlchemyBase):
     preferred_name: str = sa.Column(sa.String)
     entity_type: str = sa.Column(sa.String)
     synonyms: List[str] = sa.Column(ARRAY(sa.String, dimensions=1))
+    source: str = sa.Column(sa.String)
+    modified_date: datetime = sa.Column(sa.DateTime, default=datetime.now, index=True)
 
     mentions = relationship("EntityMention", back_populates="entity")
 
@@ -97,6 +99,7 @@ class EntityMention(SqlAlchemyBase):
     end_char: int = sa.Column(sa.Integer)
     start_token: int = sa.Column(sa.Integer)
     end_token: int = sa.Column(sa.Integer)
+    modified_date: datetime = sa.Column(sa.DateTime, default=datetime.now, index=True)
 
     document = relationship("Document", back_populates="entities")
     entity = relationship("Entity", back_populates="mentions")
