@@ -37,7 +37,7 @@ class Document(SqlAlchemyBase):
     other_ids: List[str] = sa.Column(ARRAY(sa.String, dimensions=1))
 
     ratings = relationship("UserRating", back_populates="rated_document")
-    entities = relationship("EntityMention", back_populates="mention_document")
+    entities = relationship("EntityMention", back_populates="document")
 
 
 class User(SqlAlchemyBase):
@@ -78,7 +78,7 @@ class Entity(SqlAlchemyBase):
     entity_type: str = sa.Column(sa.String)
     synonyms: List[str] = sa.Column(ARRAY(sa.String, dimensions=1))
 
-    mentions = relationship("EntityMention", back_populates="mentioned_entity")
+    mentions = relationship("EntityMention", back_populates="entity")
 
 
 class EntityMention(SqlAlchemyBase):
@@ -91,7 +91,12 @@ class EntityMention(SqlAlchemyBase):
     entity_id = sa.Column(
         sa.String, sa.ForeignKey("entities.id"), nullable=False, index=True
     )
+    text: str = sa.Column(sa.String)
+    document_section: str = sa.Column(sa.String)
+    start_char: int = sa.Column(sa.Integer)
+    end_char: int = sa.Column(sa.Integer)
+    start_token: int = sa.Column(sa.Integer)
+    end_token: int = sa.Column(sa.Integer)
 
-    # TODO: add matched text; document_part: title, summary, full_text; start_char, end_char, start_token, end_token
-    mention_document = relationship("Document", back_populates="entities")
-    mentioned_entity = relationship("Entity", back_populates="mentions")
+    document = relationship("Document", back_populates="entities")
+    entity = relationship("Entity", back_populates="mentions")
