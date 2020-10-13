@@ -96,3 +96,22 @@ class User(UserBase):
 
     class Config:
         orm_mode = True
+
+
+class MentionBase(BaseModel):
+    id: int
+
+
+class MentionCreate(MentionBase):
+    pass
+
+
+class MentionUpdate(MentionBase):
+    pass
+
+
+class Mention(MentionBase):
+    modified_date: datetime
+
+    class Config:
+        orm_mode = True

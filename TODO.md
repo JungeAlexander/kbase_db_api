@@ -1,14 +1,18 @@
-Pick scispacy annotation
 
-Figure out how to store scispacy annotation and versioning
-- dvc
-- MLflow
+Figure out how to store scispacy annotation
 
 Updated models
-  - add entity
-    - ID, name, synonyms
   - add entity mention
-    - similar to user rating except we need possition
+  - add entities
+
+Advanced entity models
+
+- normalization of text in mentions to entities
+
+Scispacy versioning
+- dvc
+- MLflow
+- quick check: coiled
 
 See Full Stack FastAPI and PostgreSQL - Base Project Generator:
 https://github.com/tiangolo/full-stack-fastapi-postgresql
@@ -20,3 +24,7 @@ https://github.com/tiangolo/full-stack-fastapi-postgresql
 - authentication
 
 Setup in AWS
+
+Snorkel for weak labelling?
+
+coiled for dask scaleout?
