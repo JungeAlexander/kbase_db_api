@@ -98,25 +98,6 @@ class User(UserBase):
         orm_mode = True
 
 
-class EntityBase(BaseModel):
-    id: int
-
-
-class EntityCreate(EntityBase):
-    pass
-
-
-class EntityUpdate(EntityBase):
-    pass
-
-
-class Entity(EntityBase):
-    modified_date: datetime
-
-    class Config:
-        orm_mode = True
-
-
 class DocumentSection(str, Enum):
     title = "title"
     summary = "summary"
@@ -125,7 +106,14 @@ class DocumentSection(str, Enum):
 
 class EntityMentionBase(BaseModel):
     id: int
+    document_id: str
+    entity_id: str
+    text: str
     document_section: DocumentSection
+    start_char: int
+    end_char: int
+    start_token: int
+    end_token: int
 
 
 class EntityMentionCreate(EntityMentionBase):
@@ -138,6 +126,30 @@ class EntityMentionUpdate(EntityMentionBase):
 
 class EntityMention(EntityMentionBase):
     modified_date: datetime
+
+    class Config:
+        orm_mode = True
+
+
+class EntityBase(BaseModel):
+    id: str
+    preferred_name: str
+    entity_type: str
+    synonyms: List[str]
+    source: str
+
+
+class EntityCreate(EntityBase):
+    pass
+
+
+class EntityUpdate(EntityBase):
+    pass
+
+
+class Entity(EntityBase):
+    modified_date: datetime
+    mentions: List[EntityMention]
 
     class Config:
         orm_mode = True
