@@ -201,7 +201,7 @@ def create_entity_mention(
     return db_entity_mention
 
 
-def get_entity_mention(db: Session, entity_mention_id: str) -> models.EntityMention:
+def get_entity_mention(db: Session, entity_mention_id: int) -> models.EntityMention:
     return (
         db.query(models.EntityMention)
         .filter(models.EntityMention.id == entity_mention_id)

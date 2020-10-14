@@ -18,3 +18,8 @@ repos:
         files: 'tests/.*'
       - id: isort
         files: 'data/.*'
+-   repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v0.790  # Use the sha / tag you want to point at
+    hooks:
+    -   id: mypy
+        args: [--no-strict-optional, --ignore-missing-imports]

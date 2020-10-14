@@ -13,8 +13,8 @@ global_init()
 
 app = FastAPI(
     title="kbase document store",
-    description="Retrieve, update, and recommend documents in kbase.",
-    # version="v1",
+    description="Retrieve, update, and recommend documents, entities and mentions in kbase.",
+    # version="v01",
     # openapi_prefix="/prod",
 )
 
@@ -194,7 +194,7 @@ def read_entities(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
 
 
 @app.get("/entities/{entity_id}", response_model=schemas.Entity)
-def read_entity(entity_id: int, db: Session = Depends(get_db)):
+def read_entity(entity_id: str, db: Session = Depends(get_db)):
     db_entity = crud.get_entity(db, entity_id=entity_id)
     if db_entity is None:
         raise HTTPException(status_code=404, detail=f"Entity ID {entity_id} not found")
@@ -203,7 +203,7 @@ def read_entity(entity_id: int, db: Session = Depends(get_db)):
 
 @app.put("/entities/{entity_id}", response_model=schemas.Entity)
 def update_entity(
-    entity_id: int, entity: schemas.EntityUpdate, db: Session = Depends(get_db)
+    entity_id: str, entity: schemas.EntityUpdate, db: Session = Depends(get_db)
 ):
     db_entity = crud.get_entity(db, entity_id=entity_id)
     if db_entity is None:
