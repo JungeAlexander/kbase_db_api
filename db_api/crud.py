@@ -161,3 +161,67 @@ def get_user_ratings(
     db: Session, skip: int = 0, limit: int = 100
 ) -> Iterable[models.UserRating]:
     return db.query(models.UserRating).offset(skip).limit(limit).all()
+
+
+def create_entity(db: Session, entity: schemas.EntityCreate) -> models.Entity:
+    db_entity = models.Entity(**entity.dict())
+    db.add(db_entity)
+    db.commit()
+    db.refresh(db_entity)
+    return db_entity
+
+
+def get_entity(db: Session, entity_id: str) -> models.Entity:
+    return db.query(models.Entity).filter(models.Entity.id == entity_id).first()
+
+
+def get_entities(
+    db: Session, skip: int = 0, limit: int = 100
+) -> Iterable[models.Entity]:
+    return db.query(models.Entity).offset(skip).limit(limit).all()
+
+
+def update_entity(db: Session, entity: schemas.EntityUpdate) -> models.Entity:
+    new_entity = models.Entity(**entity.dict())
+    old_entity = get_entity(db, new_entity.id)
+    db.delete(old_entity)
+    db.add(new_entity)
+    db.commit()
+    db.refresh(new_entity)
+    return new_entity
+
+
+def create_entity_mention(
+    db: Session, entity_mention: schemas.EntityMentionCreate
+) -> models.EntityMention:
+    db_entity_mention = models.EntityMention(**entity_mention.dict())
+    db.add(db_entity_mention)
+    db.commit()
+    db.refresh(db_entity_mention)
+    return db_entity_mention
+
+
+def get_entity_mention(db: Session, entity_mention_id: str) -> models.EntityMention:
+    return (
+        db.query(models.EntityMention)
+        .filter(models.EntityMention.id == entity_mention_id)
+        .first()
+    )
+
+
+def get_entity_mentions(
+    db: Session, skip: int = 0, limit: int = 100
+) -> Iterable[models.EntityMention]:
+    return db.query(models.EntityMention).offset(skip).limit(limit).all()
+
+
+def update_entity_mention(
+    db: Session, entity_mention: schemas.EntityMentionUpdate
+) -> models.EntityMention:
+    new_entity_mention = models.EntityMention(**entity_mention.dict())
+    old_entity_mention = get_entity_mention(db, new_entity_mention.id)
+    db.delete(old_entity_mention)
+    db.add(new_entity_mention)
+    db.commit()
+    db.refresh(new_entity_mention)
+    return new_entity_mention
