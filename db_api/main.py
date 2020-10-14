@@ -177,4 +177,83 @@ def create_rating_for_user(
     return crud.create_user_rating(db=db, user_rating=user_rating)
 
 
+@app.post("/entities/", response_model=schemas.Entity)
+def create_entity(entity: schemas.EntityCreate, db: Session = Depends(get_db)):
+    db_entity = crud.get_entity(db, entity_id=entity.id)
+    if db_entity:
+        raise HTTPException(
+            status_code=400, detail=f"Entity ID {entity.id} already registered."
+        )
+    return crud.create_entity(db=db, entity=entity)
+
+
+@app.get("/entities/", response_model=List[schemas.Entity])
+def read_entities(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    entities = crud.get_entities(db, skip=skip, limit=limit)
+    return entities
+
+
+@app.get("/entities/{entity_id}", response_model=schemas.Entity)
+def read_entity(entity_id: int, db: Session = Depends(get_db)):
+    db_entity = crud.get_entity(db, entity_id=entity_id)
+    if db_entity is None:
+        raise HTTPException(status_code=404, detail=f"Entity ID {entity_id} not found")
+    return db_entity
+
+
+@app.put("/entities/{entity_id}", response_model=schemas.Entity)
+def update_entity(
+    entity_id: int, entity: schemas.EntityUpdate, db: Session = Depends(get_db)
+):
+    db_entity = crud.get_entity(db, entity_id=entity_id)
+    if db_entity is None:
+        raise HTTPException(status_code=404, detail=f"Entity ID {entity_id} not found")
+    return crud.update_entity(db, entity)
+
+
+@app.post("/entity_mentions/", response_model=schemas.EntityMention)
+def create_entity_mention(
+    entity_mention: schemas.EntityMentionCreate, db: Session = Depends(get_db)
+):
+    db_entity_mention = crud.get_entity_mention(db, entity_mention_id=entity_mention.id)
+    if db_entity_mention:
+        raise HTTPException(
+            status_code=400,
+            detail=f"EntityMention ID {entity_mention.id} already registered.",
+        )
+    return crud.create_entity_mention(db=db, entity_mention=entity_mention)
+
+
+@app.get("/entity_mentions/", response_model=List[schemas.EntityMention])
+def read_entity_mentions(
+    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
+):
+    entity_mentions = crud.get_entity_mentions(db, skip=skip, limit=limit)
+    return entity_mentions
+
+
+@app.get("/entity_mentions/{entity_mention_id}", response_model=schemas.EntityMention)
+def read_entity_mention(entity_mention_id: int, db: Session = Depends(get_db)):
+    db_entity_mention = crud.get_entity_mention(db, entity_mention_id=entity_mention_id)
+    if db_entity_mention is None:
+        raise HTTPException(
+            status_code=404, detail=f"EntityMention ID {entity_mention_id} not found"
+        )
+    return db_entity_mention
+
+
+@app.put("/entity_mentions/{entity_mention_id}", response_model=schemas.EntityMention)
+def update_entity_mention(
+    entity_mention_id: int,
+    entity_mention: schemas.EntityMentionUpdate,
+    db: Session = Depends(get_db),
+):
+    db_entity_mention = crud.get_entity_mention(db, entity_mention_id=entity_mention_id)
+    if db_entity_mention is None:
+        raise HTTPException(
+            status_code=404, detail=f"EntityMention ID {entity_mention_id} not found"
+        )
+    return crud.update_entity_mention(db, entity_mention)
+
+
 handler = Mangum(app, enable_lifespan=False)
