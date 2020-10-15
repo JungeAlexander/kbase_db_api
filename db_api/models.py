@@ -74,7 +74,7 @@ class UserRating(SqlAlchemyBase):
 class Entity(SqlAlchemyBase):
     __tablename__ = "entities"
     id: str = sa.Column(sa.String, primary_key=True, index=True)
-    preferred_name: str = sa.Column(sa.String)
+    preferred_name: str = sa.Column(sa.String, nullable=False, index=True)
     entity_type: str = sa.Column(sa.String)
     synonyms: List[str] = sa.Column(ARRAY(sa.String, dimensions=1))
     source: str = sa.Column(sa.String)
