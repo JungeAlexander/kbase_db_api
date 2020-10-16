@@ -1,9 +1,4 @@
-
-Figure out how to store scispacy annotation
-
-Updated models
-  - add entity mention
-  - add entities
+Store scispacy annotation - unique entity IDs?
 
 Advanced entity models
 
