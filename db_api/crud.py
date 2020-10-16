@@ -32,7 +32,7 @@ def search_document_sumary(
 ) -> Iterable[models.Document]:
     search = "%{}%".format(query)
     documents = (
-        db.query(models.Document).filter(models.Document.summary.ilike(search)).all()
+        db.query(models.Document).filter(models.Document.summary.ilike(search)).all()  # type: ignore
     )
     return documents
 

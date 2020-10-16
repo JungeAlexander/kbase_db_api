@@ -8,7 +8,7 @@ from sqlalchemy.orm import relationship
 from .database import SqlAlchemyBase
 
 
-class Document(SqlAlchemyBase):
+class Document(SqlAlchemyBase):  # type: ignore
     __tablename__ = "documents"
 
     id: str = sa.Column(sa.String, primary_key=True, index=True)
@@ -40,7 +40,7 @@ class Document(SqlAlchemyBase):
     entities = relationship("EntityMention", back_populates="document")
 
 
-class User(SqlAlchemyBase):
+class User(SqlAlchemyBase):  # type: ignore
     __tablename__ = "users"
 
     id = sa.Column(sa.Integer, primary_key=True, index=True)
@@ -54,7 +54,7 @@ class User(SqlAlchemyBase):
     ratings = relationship("UserRating", back_populates="rated_by")
 
 
-class UserRating(SqlAlchemyBase):
+class UserRating(SqlAlchemyBase):  # type: ignore
     __tablename__ = "user_ratings"
 
     id = sa.Column(sa.Integer, primary_key=True, index=True)
@@ -71,7 +71,7 @@ class UserRating(SqlAlchemyBase):
     rated_document = relationship("Document", back_populates="ratings")
 
 
-class Entity(SqlAlchemyBase):
+class Entity(SqlAlchemyBase):  # type: ignore
     __tablename__ = "entities"
     id: str = sa.Column(sa.String, primary_key=True, index=True)
     preferred_name: str = sa.Column(sa.String, nullable=False, index=True)
@@ -83,7 +83,7 @@ class Entity(SqlAlchemyBase):
     mentions = relationship("EntityMention", back_populates="entity")
 
 
-class EntityMention(SqlAlchemyBase):
+class EntityMention(SqlAlchemyBase):  # type: ignore
     __tablename__ = "entity_mentions"
 
     id = sa.Column(sa.Integer, primary_key=True, index=True)

@@ -215,11 +215,17 @@ def update_entity(
 def create_entity_mention(
     entity_mention: schemas.EntityMentionCreate, db: Session = Depends(get_db)
 ):
-    db_entity_mention = crud.get_entity_mention(db, entity_mention_id=entity_mention.id)
-    if db_entity_mention:
+    db_document = crud.get_document(db, document_id=entity_mention.document_id)
+    if db_document is None:
         raise HTTPException(
             status_code=400,
-            detail=f"EntityMention ID {entity_mention.id} already registered.",
+            detail=f"Document ID {entity_mention.document_id} not registered.",
+        )
+    db_entity = crud.get_entity(db, entity_id=entity_mention.entity_id)
+    if db_entity is None:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Entity ID {entity_mention.entity_id} not registered.",
         )
     return crud.create_entity_mention(db=db, entity_mention=entity_mention)
 

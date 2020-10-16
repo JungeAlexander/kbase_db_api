@@ -98,14 +98,13 @@ class User(UserBase):
         orm_mode = True
 
 
-class DocumentSection(str, Enum):
+class DocumentSection(Enum):
     title = "title"
     summary = "summary"
     full_text = "full_text"
 
 
 class EntityMentionBase(BaseModel):
-    id: int
     document_id: str
     entity_id: str
     text: str
@@ -125,6 +124,7 @@ class EntityMentionUpdate(EntityMentionBase):
 
 
 class EntityMention(EntityMentionBase):
+    id: int
     modified_date: datetime
 
     class Config:
