@@ -1,4 +1,6 @@
-Store scispacy annotation - unique entity IDs?
+Implement check for existing mentions: identity
+
+Retrieve scispacy annotation in streamlit
 
 Advanced entity models
 

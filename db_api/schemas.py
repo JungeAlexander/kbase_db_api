@@ -98,7 +98,7 @@ class User(UserBase):
         orm_mode = True
 
 
-class DocumentSection(Enum):
+class DocumentSection(str, Enum):
     title = "title"
     summary = "summary"
     full_text = "full_text"
