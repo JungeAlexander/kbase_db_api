@@ -26,6 +26,39 @@ class UserRating(UserRatingCreate):
         orm_mode = True
 
 
+class DocumentSection(str, Enum):
+    title = "title"
+    summary = "summary"
+    full_text = "full_text"
+
+
+class EntityMentionBase(BaseModel):
+    document_id: str
+    entity_id: str
+    text: str
+    document_section: DocumentSection
+    start_char: int
+    end_char: int
+    start_token: int
+    end_token: int
+
+
+class EntityMentionCreate(EntityMentionBase):
+    pass
+
+
+class EntityMentionUpdate(EntityMentionBase):
+    pass
+
+
+class EntityMention(EntityMentionBase):
+    id: int
+    modified_date: datetime
+
+    class Config:
+        orm_mode = True
+
+
 class DocumentType(str, Enum):
     preprint = "preprint"
     postprint = "postprint"
@@ -69,6 +102,7 @@ class DocumentUpdate(DocumentBase):
 class Document(DocumentBase):
     modified_date: datetime
     ratings: List[UserRating] = []
+    entities: List[EntityMention] = []
 
     class Config:
         orm_mode = True
@@ -93,39 +127,6 @@ class User(UserBase):
     last_login: datetime
     is_active: bool
     ratings: List[UserRating] = []
-
-    class Config:
-        orm_mode = True
-
-
-class DocumentSection(str, Enum):
-    title = "title"
-    summary = "summary"
-    full_text = "full_text"
-
-
-class EntityMentionBase(BaseModel):
-    document_id: str
-    entity_id: str
-    text: str
-    document_section: DocumentSection
-    start_char: int
-    end_char: int
-    start_token: int
-    end_token: int
-
-
-class EntityMentionCreate(EntityMentionBase):
-    pass
-
-
-class EntityMentionUpdate(EntityMentionBase):
-    pass
-
-
-class EntityMention(EntityMentionBase):
-    id: int
-    modified_date: datetime
 
     class Config:
         orm_mode = True
