@@ -211,6 +211,23 @@ def update_entity(
     return crud.update_entity(db, entity)
 
 
+@app.get(
+    "/entities/{entity_id}/documents/{document_id}",
+    response_model=List[schemas.EntityMention],
+)
+def get_mentions_by_entity_and_document(
+    entity_id: str, document_id: str, db: Session = Depends(get_db)
+):
+    db_mentions = crud.get_mentions_by_entity_and_document(db, document_id, entity_id)
+    if db_mentions is None:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Entity ID {entity_id} is not mentioned in document ID {document_id}.",
+        )
+    else:
+        return db_mentions
+
+
 @app.post("/entity_mentions/", response_model=schemas.EntityMention)
 def create_entity_mention(
     entity_mention: schemas.EntityMentionCreate, db: Session = Depends(get_db)

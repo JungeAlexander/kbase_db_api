@@ -4,6 +4,8 @@ from typing import Iterable
 from passlib.handlers.sha2_crypt import sha512_crypt
 from sqlalchemy.orm import Session
 
+from db_api.models import EntityMention
+
 from . import models, schemas
 
 
@@ -154,6 +156,19 @@ def get_user_rating_by_document_and_user(
             & (models.UserRating.user_id == user_id)
         )
         .first()
+    )
+
+
+def get_mentions_by_entity_and_document(
+    db: Session, document_id: str, entity_id: str
+) -> Iterable[models.EntityMention]:
+    return (
+        db.query(models.EntityMention)
+        .filter(
+            (models.EntityMention.document_id == document_id)
+            & (models.EntityMention.entity_id == entity_id)
+        )
+        .all()
     )
 
 

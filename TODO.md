@@ -1,6 +1,10 @@
-Implement check for existing mentions: identity
+Implement check for existing mentions in notebook
 
-Retrieve scispacy annotation in streamlit
+Fix entity identifier: normalize case
+
+merge into master
+
+Retrieve scispacy annotation in streamlit or is a notebook fine?
 
 Advanced entity models
 
@@ -25,5 +29,7 @@ CI/CD
 Setup in AWS
 
 Snorkel for weak labelling?
+
+Prodigy for active learning? https://github.com/explosion/jupyterlab-prodigy
 
 coiled for dask scaleout?
