@@ -1,6 +1,4 @@
-Fix entity identifier: normalize case
-
-merge into master
+public annotation? or manual? what - diseases e.g. mondo?
 
 See Full Stack FastAPI and PostgreSQL - Base Project Generator:
 https://github.com/tiangolo/full-stack-fastapi-postgresql
