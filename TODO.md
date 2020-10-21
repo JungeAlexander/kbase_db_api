@@ -1,14 +1,4 @@
-Pick scispacy annotation
-
-Figure out how to store scispacy annotation and versioning
-- dvc
-- MLflow
-
-Updated models
-  - add entity
-    - ID, name, synonyms
-  - add entity mention
-    - similar to user rating except we need possition
+public annotation? or manual? what - diseases e.g. mondo?
 
 See Full Stack FastAPI and PostgreSQL - Base Project Generator:
 https://github.com/tiangolo/full-stack-fastapi-postgresql
@@ -19,4 +9,23 @@ https://github.com/tiangolo/full-stack-fastapi-postgresql
 - poetry setup
 - authentication
 
+Retrieve scispacy annotation in streamlit or is a notebook fine?
+
+Advanced entity models
+
+- normalization of text in mentions to entities
+
+Scispacy versioning
+- dvc
+- MLflow
+- quick check: coiled
+
+CI/CD
+
 Setup in AWS
+
+Snorkel for weak labelling?
+
+Prodigy for active learning? https://github.com/explosion/jupyterlab-prodigy
+
+coiled for dask scaleout?

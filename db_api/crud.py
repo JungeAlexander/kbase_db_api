@@ -4,6 +4,8 @@ from typing import Iterable
 from passlib.handlers.sha2_crypt import sha512_crypt
 from sqlalchemy.orm import Session
 
+from db_api.models import EntityMention
+
 from . import models, schemas
 
 
@@ -32,7 +34,7 @@ def search_document_sumary(
 ) -> Iterable[models.Document]:
     search = "%{}%".format(query)
     documents = (
-        db.query(models.Document).filter(models.Document.summary.ilike(search)).all()
+        db.query(models.Document).filter(models.Document.summary.ilike(search)).all()  # type: ignore
     )
     return documents
 
@@ -157,7 +159,84 @@ def get_user_rating_by_document_and_user(
     )
 
 
+def get_mentions_by_entity_and_document(
+    db: Session, document_id: str, entity_id: str
+) -> Iterable[models.EntityMention]:
+    return (
+        db.query(models.EntityMention)
+        .filter(
+            (models.EntityMention.document_id == document_id)
+            & (models.EntityMention.entity_id == entity_id)
+        )
+        .all()
+    )
+
+
 def get_user_ratings(
     db: Session, skip: int = 0, limit: int = 100
 ) -> Iterable[models.UserRating]:
     return db.query(models.UserRating).offset(skip).limit(limit).all()
+
+
+def create_entity(db: Session, entity: schemas.EntityCreate) -> models.Entity:
+    db_entity = models.Entity(**entity.dict())
+    db.add(db_entity)
+    db.commit()
+    db.refresh(db_entity)
+    return db_entity
+
+
+def get_entity(db: Session, entity_id: str) -> models.Entity:
+    return db.query(models.Entity).filter(models.Entity.id == entity_id).first()
+
+
+def get_entities(
+    db: Session, skip: int = 0, limit: int = 100
+) -> Iterable[models.Entity]:
+    return db.query(models.Entity).offset(skip).limit(limit).all()
+
+
+def update_entity(db: Session, entity: schemas.EntityUpdate) -> models.Entity:
+    new_entity = models.Entity(**entity.dict())
+    old_entity = get_entity(db, new_entity.id)
+    db.delete(old_entity)
+    db.add(new_entity)
+    db.commit()
+    db.refresh(new_entity)
+    return new_entity
+
+
+def create_entity_mention(
+    db: Session, entity_mention: schemas.EntityMentionCreate
+) -> models.EntityMention:
+    db_entity_mention = models.EntityMention(**entity_mention.dict())
+    db.add(db_entity_mention)
+    db.commit()
+    db.refresh(db_entity_mention)
+    return db_entity_mention
+
+
+def get_entity_mention(db: Session, entity_mention_id: int) -> models.EntityMention:
+    return (
+        db.query(models.EntityMention)
+        .filter(models.EntityMention.id == entity_mention_id)
+        .first()
+    )
+
+
+def get_entity_mentions(
+    db: Session, skip: int = 0, limit: int = 100
+) -> Iterable[models.EntityMention]:
+    return db.query(models.EntityMention).offset(skip).limit(limit).all()
+
+
+def update_entity_mention(
+    db: Session, entity_mention: schemas.EntityMentionUpdate
+) -> models.EntityMention:
+    new_entity_mention = models.EntityMention(**entity_mention.dict())
+    old_entity_mention = get_entity_mention(db, new_entity_mention.id)
+    db.delete(old_entity_mention)
+    db.add(new_entity_mention)
+    db.commit()
+    db.refresh(new_entity_mention)
+    return new_entity_mention
