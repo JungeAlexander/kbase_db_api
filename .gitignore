@@ -18,3 +18,4 @@ data/cord/**/*.csv
 fastapi_test/
 data/cord/load_cord_subset.err
 data/20201022-NCBI-disease-corpus/*.zip
+data/20201022-NCBI-disease-corpus/*.txt

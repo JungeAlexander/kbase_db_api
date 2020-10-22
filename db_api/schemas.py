@@ -41,7 +41,7 @@ class EntityMentionBase(BaseModel):
     end_char: int
     start_token: int
     end_token: int
-    source: str 
+    source: str
 
 
 class EntityMentionCreate(EntityMentionBase):
