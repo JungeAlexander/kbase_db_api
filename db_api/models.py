@@ -99,6 +99,7 @@ class EntityMention(SqlAlchemyBase):  # type: ignore
     end_char: int = sa.Column(sa.Integer)
     start_token: int = sa.Column(sa.Integer)
     end_token: int = sa.Column(sa.Integer)
+    source: str = sa.Column(sa.String, index=True)
     modified_date: datetime = sa.Column(sa.DateTime, default=datetime.now, index=True)
 
     document = relationship("Document", back_populates="entities")
