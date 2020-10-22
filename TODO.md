@@ -1,4 +1,4 @@
-public annotation? or manual? what - diseases e.g. mondo?
+public annotation? or manual? what - diseases e.g. mondo? see pubtator corpora?
 
 See Full Stack FastAPI and PostgreSQL - Base Project Generator:
 https://github.com/tiangolo/full-stack-fastapi-postgresql
