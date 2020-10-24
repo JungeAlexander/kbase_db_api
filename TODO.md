@@ -1,4 +1,4 @@
-public annotation? or manual? what - diseases e.g. mondo? see pubtator corpora?
+Check NCBI disease mention positions against actual matches before loading
 
 See Full Stack FastAPI and PostgreSQL - Base Project Generator:
 https://github.com/tiangolo/full-stack-fastapi-postgresql
@@ -29,3 +29,6 @@ Snorkel for weak labelling?
 Prodigy for active learning? https://github.com/explosion/jupyterlab-prodigy
 
 coiled for dask scaleout?
+
+Other document types:
+- podcast show notes and run regular NER, not biomedical, try summarization
