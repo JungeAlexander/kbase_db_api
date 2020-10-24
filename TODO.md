@@ -1,5 +1,6 @@
+Visualize NCBI_Disease:10192393 annotations
+
 Check NCBI disease mention positions against actual matches before loading
- - for sure a problem with splitting matches title and abstract and not adjusting counters
 
 See Full Stack FastAPI and PostgreSQL - Base Project Generator:
 https://github.com/tiangolo/full-stack-fastapi-postgresql
