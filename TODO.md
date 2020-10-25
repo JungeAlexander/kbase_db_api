@@ -1,4 +1,6 @@
-Visualize NCBI_Disease:10192393 annotations
+Compare NCBI_Disease:10192393 annotations and scispacy
+
+Add extras column
 
 Check NCBI disease mention positions against actual matches before loading
 
