@@ -7,6 +7,12 @@ docker run -p 80:80 -e MAX_WORKERS="1" db_api:latest
 
 ## Setup
 
+###
+
+```
+poetry install --no-root
+```
+
 ### Pre-commit
 
 ```
