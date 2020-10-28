@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "kbase_db_api"
+version = "0.1.0"
+description = ""
+authors = ["Alexander Junge <alexander.junge@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+uvicorn = "^0.12.0"
+typer = "^0.3.0"
+sqlalchemy = "^1.3.0"
+python-dotenv = "^0.12.0"
+"git+git" = "//github.com/titipata/pubmed_parser.git@d958d7499dd3bbaf8feb9aacd2e8f7b91efe4330"
+psycopg2-binary = "^2.8.0"
+passlib = "^1.7.0"
+mangum = "^0.9.0"
+lxml = "^4.5.0"
+httpx = "^0.13.0"
+fastapi = "^0.54.0"
+email-validator = "^1.0.0"
+alembic = "^1.3.0"
+
+[tool.poetry.dev-dependencies]
+spacy = "^2.3.2"
+scispacy = "^0.3.0"
+pre-commit = "^2.7.1"
+jupyterlab = "^2.1.5"
+flake8 = "^3.8.3"
+en-ner-craft-md = {url = "https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.3.0/en_ner_craft_md-0.3.0.tar.gz"}
+en-ner-bc5cdr-md = {url = "https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.3.0/en_ner_bc5cdr_md-0.3.0.tar.gz"}
+black = "^19.10b0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
