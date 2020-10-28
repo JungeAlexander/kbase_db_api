@@ -36,3 +36,5 @@ coiled for dask scaleout?
 
 Other document types:
 - podcast show notes and run regular NER, not biomedical, try summarization
+
+relation extraction: https://www.biorxiv.org/content/10.1101/730085v2.full.pdf
