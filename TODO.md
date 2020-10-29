@@ -1,4 +1,4 @@
-Compare NCBI_Disease:10192393 annotations and scispacy
+Compare NCBI_Disease:10192393 annotations and scispacy by character level precision, recall, f1 using sklearn?
 
 Add extras column
 
@@ -13,8 +13,6 @@ https://github.com/tiangolo/full-stack-fastapi-postgresql
 - poetry setup
 - authentication
 
-Retrieve scispacy annotation in streamlit or is a notebook fine?
-
 Advanced entity models
 
 - normalization of text in mentions to entities
@@ -28,6 +26,8 @@ CI/CD
 
 Setup in AWS
 
+Homegrown labelling app using streamlit?
+
 Snorkel for weak labelling?
 
 Prodigy for active learning? https://github.com/explosion/jupyterlab-prodigy
@@ -37,4 +37,6 @@ coiled for dask scaleout?
 Other document types:
 - podcast show notes and run regular NER, not biomedical, try summarization
 
-relation extraction: https://www.biorxiv.org/content/10.1101/730085v2.full.pdf
+relation extraction:
+- https://github.com/jakelever/kindred/tree/master/tutorial
+- https://www.biorxiv.org/content/10.1101/730085v2.full.pdf
