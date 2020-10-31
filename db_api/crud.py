@@ -1,5 +1,5 @@
 from datetime import date
-from typing import Iterable
+from typing import Iterable, Set, Tuple
 
 from passlib.handlers.sha2_crypt import sha512_crypt
 from sqlalchemy.orm import Session
@@ -240,3 +240,17 @@ def update_entity_mention(
     db.commit()
     db.refresh(new_entity_mention)
     return new_entity_mention
+
+
+def precision_recall_fscore(
+    predicted: Set, gold: Set, beta: float = 1.0
+) -> Tuple[float, float, float, int, int, int]:
+    tp = len(predicted.intersection(gold))
+    fp = len(predicted - gold)
+    fn = len(gold - predicted)
+    precision = tp / (tp + fp + 1e-100)
+    recall = tp / (tp + fn + 1e-100)
+    fscore = (1 + beta ** 2) * (
+        (precision * recall) / (((beta ** 2) * precision) + recall + 1e-100)
+    )
+    return precision, recall, fscore, tp, fp, fn
