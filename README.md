@@ -7,7 +7,7 @@ docker run -p 80:80 -e MAX_WORKERS="1" db_api:latest
 
 ## Setup
 
-###
+### Poetry
 
 ```
 poetry install --no-root
@@ -28,6 +28,12 @@ https://github.com/tiangolo/full-stack-fastapi-postgresql
 
 ### Manually
 
+### Pytest
+
+```
+poetry run pytest -v tests
+```
+
 #### PostgreSQL
 
 ```
@@ -42,5 +48,5 @@ psql -h localhost -p 10000 -U postgres
 #### FastAPI
 
 ```
-uvicorn db_api.main:app --reload
+poetry run uvicorn db_api.main:app --reload
 ```
