@@ -29,6 +29,7 @@ flake8 = "^3.8.3"
 en-ner-craft-md = {url = "https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.3.0/en_ner_craft_md-0.3.0.tar.gz"}
 en-ner-bc5cdr-md = {url = "https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.3.0/en_ner_bc5cdr_md-0.3.0.tar.gz"}
 black = "^19.10b0"
+pytest = "^6.1.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
