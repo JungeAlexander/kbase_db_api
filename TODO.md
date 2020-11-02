@@ -1,8 +1,8 @@
-Compare NCBI_Disease:10192393 annotations and scispacy by character level precision, recall, f1 using sklearn?
+Check NCBI disease mention positions against actual matches before loading
+
+Find example documents
 
 Add extras column
-
-Check NCBI disease mention positions against actual matches before loading
 
 See Full Stack FastAPI and PostgreSQL - Base Project Generator:
 https://github.com/tiangolo/full-stack-fastapi-postgresql
@@ -10,7 +10,6 @@ https://github.com/tiangolo/full-stack-fastapi-postgresql
 - version API
 - add prod as openapi_prefix?
 - router
-- poetry setup
 - authentication
 
 Advanced entity models
