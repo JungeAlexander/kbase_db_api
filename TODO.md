@@ -1,5 +1,3 @@
-Check NCBI disease mention positions against actual matches before loading
-
 Find example documents
 
 Add extras column
