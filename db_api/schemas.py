@@ -155,3 +155,33 @@ class Entity(EntityBase):
 
     class Config:
         orm_mode = True
+
+
+class NEREvaluationBase(BaseModel):
+    document_id: str
+    document_section: DocumentSection
+    ner_source: str
+    annotation_source: str
+    tp: int
+    tn: int
+    fp: int
+    fn: int
+    precision: float
+    recall: float
+    fscore: float
+
+
+class NEREvaluationCreate(NEREvaluationBase):
+    pass
+
+
+class NEREvaluationUpdate(NEREvaluationBase):
+    pass
+
+
+class NEREvaluation(NEREvaluationBase):
+    id: int
+    modified_date: datetime
+
+    class Config:
+        orm_mode = True
