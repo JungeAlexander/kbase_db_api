@@ -38,6 +38,7 @@ class Document(SqlAlchemyBase):  # type: ignore
 
     ratings = relationship("UserRating", back_populates="rated_document")
     entities = relationship("EntityMention", back_populates="document")
+    ner_evaluations = relationship("NERevaluation", back_populates="document")
 
 
 class User(SqlAlchemyBase):  # type: ignore
@@ -104,3 +105,22 @@ class EntityMention(SqlAlchemyBase):  # type: ignore
 
     document = relationship("Document", back_populates="entities")
     entity = relationship("Entity", back_populates="mentions")
+
+
+class NEREvaluation(SqlAlchemyBase):  # type: ignore
+    id = sa.Column(sa.Integer, primary_key=True, index=True)
+    document_id = sa.Column(
+        sa.String, sa.ForeignKey("documents.id"), nullable=False, index=True
+    )
+    document_section: str = sa.Column(sa.String)
+    ner_source: str = sa.Column(sa.String, index=True)
+    annotation_source: str = sa.Column(sa.String, index=True)
+    tp: int = sa.Column(sa.Integer)
+    tn: int = sa.Column(sa.Integer)
+    fp: int = sa.Column(sa.Integer)
+    fn: int = sa.Column(sa.Integer)
+    precision: float = sa.Column(sa.Float)
+    recall: float = sa.Column(sa.Float)
+    fscore: float = sa.Column(sa.Float)
+
+    document = relationship("Document", back_populates="ner_evaluation")
