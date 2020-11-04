@@ -1,6 +1,9 @@
 Find example documents
 
-Add extras column
+Setup in AWS
+- deploy model
+
+Add extras column (start with Evaluation)
 
 See Full Stack FastAPI and PostgreSQL - Base Project Generator:
 https://github.com/tiangolo/full-stack-fastapi-postgresql
@@ -21,7 +24,6 @@ Scispacy versioning
 
 CI/CD
 
-Setup in AWS
 
 Homegrown labelling app using streamlit?
 
