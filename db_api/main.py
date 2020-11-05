@@ -279,4 +279,49 @@ def update_entity_mention(
     return crud.update_entity_mention(db, entity_mention)
 
 
+@app.post("/ner_evaluations/", response_model=schemas.NEREvaluation)
+def create_ner_evaluation(
+    ner_evaluation: schemas.NEREvaluationCreate, db: Session = Depends(get_db)
+):
+    db_document = crud.get_document(db, document_id=ner_evaluation.document_id)
+    if db_document is None:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Document ID {ner_evaluation.document_id} not registered.",
+        )
+    return crud.create_ner_evaluation(db=db, ner_evaluation=ner_evaluation)
+
+
+@app.get("/ner_evaluations/", response_model=List[schemas.NEREvaluation])
+def read_ner_evaluations(
+    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
+):
+    ner_evaluations = crud.get_ner_evaluations(db, skip=skip, limit=limit)
+    return ner_evaluations
+
+
+@app.get("/ner_evaluations/{ner_evaluation_id}", response_model=schemas.NEREvaluation)
+def read_ner_evaluation(ner_evaluation_id: int, db: Session = Depends(get_db)):
+    db_ner_evaluation = crud.get_ner_evaluation(db, ner_evaluation_id=ner_evaluation_id)
+    if db_ner_evaluation is None:
+        raise HTTPException(
+            status_code=404, detail=f"NEREvaluation ID {ner_evaluation_id} not found"
+        )
+    return db_ner_evaluation
+
+
+@app.put("/ner_evaluations/{ner_evaluation_id}", response_model=schemas.NEREvaluation)
+def update_ner_evaluation(
+    ner_evaluation_id: int,
+    ner_evaluation: schemas.NEREvaluationUpdate,
+    db: Session = Depends(get_db),
+):
+    db_ner_evaluation = crud.get_ner_evaluation(db, ner_evaluation_id=ner_evaluation_id)
+    if db_ner_evaluation is None:
+        raise HTTPException(
+            status_code=404, detail=f"NEREvaluation ID {ner_evaluation_id} not found"
+        )
+    return crud.update_ner_evaluation(db, ner_evaluation)
+
+
 handler = Mangum(app, enable_lifespan=False)
