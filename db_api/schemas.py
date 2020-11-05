@@ -60,6 +60,36 @@ class EntityMention(EntityMentionBase):
         orm_mode = True
 
 
+class NEREvaluationBase(BaseModel):
+    document_id: str
+    document_section: DocumentSection
+    ner_source: str
+    annotation_source: str
+    tp: int
+    tn: int
+    fp: int
+    fn: int
+    precision: float
+    recall: float
+    fscore: float
+
+
+class NEREvaluationCreate(NEREvaluationBase):
+    pass
+
+
+class NEREvaluationUpdate(NEREvaluationBase):
+    pass
+
+
+class NEREvaluation(NEREvaluationBase):
+    id: int
+    modified_date: datetime
+
+    class Config:
+        orm_mode = True
+
+
 class DocumentType(str, Enum):
     preprint = "preprint"
     postprint = "postprint"
@@ -104,6 +134,7 @@ class Document(DocumentBase):
     modified_date: datetime
     ratings: List[UserRating] = []
     entities: List[EntityMention] = []
+    ner_evaluations: List[NEREvaluation] = []
 
     class Config:
         orm_mode = True
@@ -152,36 +183,6 @@ class EntityUpdate(EntityBase):
 class Entity(EntityBase):
     modified_date: datetime
     mentions: List[EntityMention]
-
-    class Config:
-        orm_mode = True
-
-
-class NEREvaluationBase(BaseModel):
-    document_id: str
-    document_section: DocumentSection
-    ner_source: str
-    annotation_source: str
-    tp: int
-    tn: int
-    fp: int
-    fn: int
-    precision: float
-    recall: float
-    fscore: float
-
-
-class NEREvaluationCreate(NEREvaluationBase):
-    pass
-
-
-class NEREvaluationUpdate(NEREvaluationBase):
-    pass
-
-
-class NEREvaluation(NEREvaluationBase):
-    id: int
-    modified_date: datetime
 
     class Config:
         orm_mode = True
