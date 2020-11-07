@@ -24,8 +24,11 @@ def get_matches(
 
 
 def display_matches(text, labels, title):
-    colors = {"DISEASE": "linear-gradient(90deg, #999999, #cccccc)"}
-    options = {"ents": ["DISEASE"], "colors": colors}
+    colors = {
+        "DISEASE": "linear-gradient(90deg, #999999, #cccccc)",
+        "GGP": "linear-gradient(90deg, #9999ff, #9999bb)",
+    }
+    options = {"ents": ["DISEASE", "GGP"], "colors": colors}
     ex = [
         {
             "text": text,
