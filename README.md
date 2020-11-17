@@ -11,6 +11,7 @@ docker run -p 80:80 -e MAX_WORKERS="1" db_api:latest
 
 ```
 poetry install --no-root
+jupyter nbextension enable --py widgetsnbextension
 ```
 
 ### Pre-commit

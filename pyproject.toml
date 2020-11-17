@@ -34,6 +34,7 @@ black = "^19.10b0"
 pytest = "^6.1.2"
 torch = "^1.7.0"
 transformers = "^3.5.1"
+ipywidgets = "^7.5.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
