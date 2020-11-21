@@ -19,3 +19,5 @@ fastapi_test/
 data/cord/load_cord_subset.err
 data/20201022-NCBI-disease-corpus/*.zip
 data/20201022-NCBI-disease-corpus/*.txt
+data/podcasts/Python_Bytes/*_rss_full_history
+data/podcasts/Talk_Python_To_Me/*_rss_full_history

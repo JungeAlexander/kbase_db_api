@@ -14,12 +14,13 @@ python-dotenv = "^0.12.0"
 psycopg2-binary = "^2.8.0"
 passlib = "^1.7.0"
 mangum = "^0.9.0"
-lxml = "^4.5.0"
+lxml = "4.4.1"
 httpx = "^0.13.0"
 fastapi = "^0.54.0"
 email-validator = "^1.0.0"
 alembic = "^1.3.0"
 pandas = "^1.1.4"
+kindred = "^2.7.2"
 
 [tool.poetry.dev-dependencies]
 spacy = "^2.3.2"
@@ -31,6 +32,9 @@ en-ner-craft-md = {url = "https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/rel
 en-ner-bc5cdr-md = {url = "https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.3.0/en_ner_bc5cdr_md-0.3.0.tar.gz"}
 black = "^19.10b0"
 pytest = "^6.1.2"
+torch = "^1.7.0"
+transformers = "^3.5.1"
+ipywidgets = "^7.5.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
