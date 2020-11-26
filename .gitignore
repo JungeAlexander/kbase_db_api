@@ -22,3 +22,5 @@ data/20201022-NCBI-disease-corpus/*.txt
 data/podcasts/Python_Bytes/*_rss_full_history
 data/podcasts/Talk_Python_To_Me/*_rss_full_history
 notebooks/transformers_qa_mlflow_pyfunc/
+notebooks/model_bert-large-uncased-whole-word-masking-finetuned-squad/
+notebooks/tokenizer_bert-large-uncased-whole-word-masking-finetuned-squad/
