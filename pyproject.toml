@@ -37,6 +37,7 @@ torch = "^1.7.0"
 transformers = "^3.5.1"
 ipywidgets = "^7.5.1"
 mlflow = "^1.12.1"
+boto3 = "^1.16.25"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
