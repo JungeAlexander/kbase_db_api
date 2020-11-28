@@ -1048,7 +1048,7 @@ python-versions = "*"
 
 [[package]]
 name = "mlflow"
-version = "1.12.1"
+version = "1.12.0"
 description = "MLflow: A Platform for ML Development and Productionization"
 category = "dev"
 optional = false
@@ -2342,7 +2342,7 @@ notebook = ">=4.4.1"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "dca3a3184710969714c8344aa69a80360d53e079c225dc2e213fe1d9346f380d"
+content-hash = "336dd28be2b1aa600b5753e82677159b613e09672bfb95208d366b3af1ae1fcb"
 
 [metadata.files]
 alabaster = [
@@ -2834,8 +2834,8 @@ mistune = [
     {file = "mistune-0.8.4.tar.gz", hash = "sha256:59a3429db53c50b5c6bcc8a07f8848cb00d7dc8bdb431a4ab41920d201d4756e"},
 ]
 mlflow = [
-    {file = "mlflow-1.12.1-py3-none-any.whl", hash = "sha256:c1176a71801d4b40ce18001ce1d4cd9a30583acfed1db4667944436386121553"},
-    {file = "mlflow-1.12.1.tar.gz", hash = "sha256:9b8af18d6e779fbbb094edfeb963691e485bba62eeec39fd62dfbe34bc12afeb"},
+    {file = "mlflow-1.12.0-py3-none-any.whl", hash = "sha256:8757f6f82c0ee12ab01d77c373dcc0f605714192bc9c14902fc76833a80b5c66"},
+    {file = "mlflow-1.12.0.tar.gz", hash = "sha256:d181d2de2ff976ff7385347f38ff871450a066ba12116402d9455f6997c775a1"},
 ]
 monotonic = [
     {file = "monotonic-1.5-py2.py3-none-any.whl", hash = "sha256:552a91f381532e33cbd07c6a2655a21908088962bb8fa7239ecbcc6ad1140cc7"},
