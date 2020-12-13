@@ -91,6 +91,12 @@ class NEREvaluation(NEREvaluationBase):
 
 
 class DocumentType(str, Enum):
+    scientific_article = "Scientific article"
+    podcast_episode = "Podcast episode"
+
+
+class DocumentSubType(str, Enum):
+    not_specified = "not specified"
     preprint = "preprint"
     postprint = "postprint"
     proceeding = "proceeding"
@@ -100,26 +106,32 @@ class DocumentBase(BaseModel):
     id: str
     version: str
     source: str
-    journal: str
-    document_type: DocumentType
     title: str
+    document_type: DocumentType
     publication_date: date
     update_date: date
     urls: List[str]
-    pmid: int = -1
-    license: str = ""
-    doi: str = ""
-    arxiv_id: str = ""
     summary: str = ""
-    full_text: str = ""
+    text: str = ""
+    document_subtype: DocumentSubType = DocumentSubType.not_specified
     authors: List[str] = []
-    affiliations: List[str] = []
     language: str = ""
     keywords: List[str] = []
-    in_citations: List[str] = []
-    out_citations: List[str] = []
     tags: List[str] = []
-    other_ids: List[str] = []
+    # TODO move to extra
+    # Podcast:
+    # episode_number : int
+    # duration_in_seconds: int
+    #
+    # Article:
+    # journal: str
+    # pmid: int = -1
+    # license: str = ""
+    # doi: str = ""
+    # arxiv_id: str = ""
+    # in_citations: List[str] = []
+    # out_citations: List[str] = []
+    # other_ids: List[str] = []
 
 
 class DocumentCreate(DocumentBase):
