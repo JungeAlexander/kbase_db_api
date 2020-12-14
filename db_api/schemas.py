@@ -1,6 +1,6 @@
 from datetime import date, datetime
 from enum import Enum
-from typing import List
+from typing import Dict, List
 
 from pydantic import BaseModel, EmailStr
 
@@ -118,6 +118,7 @@ class DocumentBase(BaseModel):
     language: str = ""
     keywords: List[str] = []
     tags: List[str] = []
+    extra: Dict = {}
     # TODO move to extra
     # Podcast:
     # episode_number : int
