@@ -1,8 +1,8 @@
 from datetime import date, datetime
-from typing import List
+from typing import Dict, List
 
 import sqlalchemy as sa
-from sqlalchemy.dialects.postgresql import ARRAY
+from sqlalchemy.dialects.postgresql import ARRAY, JSONB
 from sqlalchemy.orm import relationship
 
 from .database import SqlAlchemyBase
@@ -14,27 +14,20 @@ class Document(SqlAlchemyBase):  # type: ignore
     id: str = sa.Column(sa.String, primary_key=True, index=True)
     version: str = sa.Column(sa.String)
     source: str = sa.Column(sa.String)
-    journal: str = sa.Column(sa.String)
-    document_type: str = sa.Column(sa.String)
     title: str = sa.Column(sa.String)
+    document_type: str = sa.Column(sa.String)
     publication_date: date = sa.Column(sa.Date, index=True)
     update_date: date = sa.Column(sa.Date, index=True)
     modified_date: datetime = sa.Column(sa.DateTime, default=datetime.now, index=True)
     urls: str = sa.Column(ARRAY(sa.String, dimensions=1))
-    pmid: int = sa.Column(sa.Integer)
-    arxiv_id: str = sa.Column(sa.String)
-    license: str = sa.Column(sa.String)
-    doi: str = sa.Column(sa.String)
     summary: str = sa.Column(sa.String)
-    full_text: str = sa.Column(sa.String)
+    text: str = sa.Column(sa.String)
+    document_subtype: str = sa.Column(sa.String)
     authors: List[str] = sa.Column(ARRAY(sa.String, dimensions=1))
-    affiliations: List[str] = sa.Column(ARRAY(sa.String, dimensions=1))
     language: str = sa.Column(sa.String)
     keywords: List[str] = sa.Column(ARRAY(sa.String, dimensions=1))
-    in_citations: List[str] = sa.Column(ARRAY(sa.String, dimensions=1))
-    out_citations: List[str] = sa.Column(ARRAY(sa.String, dimensions=1))
     tags: List[str] = sa.Column(ARRAY(sa.String, dimensions=1))
-    other_ids: List[str] = sa.Column(ARRAY(sa.String, dimensions=1))
+    extra: Dict = sa.Column(JSONB)
 
     ratings = relationship("UserRating", back_populates="rated_document")
     entities = relationship("EntityMention", back_populates="document")
