@@ -102,6 +102,12 @@ class DocumentSubType(str, Enum):
     proceeding = "proceeding"
 
 
+class TextFormat(str, Enum):
+    html = "HTML"
+    plain = "Plain text"
+    markdown = "Markdown"
+
+
 class DocumentBase(BaseModel):
     id: str
     version: str
@@ -112,7 +118,9 @@ class DocumentBase(BaseModel):
     update_date: date
     urls: List[str]
     summary: str = ""
-    text: str = ""
+    raw_text: str = ""
+    raw_text_format: TextFormat = TextFormat.plain
+    parsed_text: str = ""
     document_subtype: DocumentSubType = DocumentSubType.not_specified
     authors: List[str] = []
     language: str = ""
