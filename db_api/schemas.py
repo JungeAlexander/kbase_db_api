@@ -108,6 +108,13 @@ class TextFormat(str, Enum):
     markdown = "Markdown"
 
 
+class Language(str, Enum):
+    english = "English"
+    german = "German"
+    danish = "Danish"
+    na = "NA"
+
+
 class DocumentBase(BaseModel):
     id: str
     version: str
@@ -123,7 +130,7 @@ class DocumentBase(BaseModel):
     parsed_text: str = ""
     document_subtype: DocumentSubType = DocumentSubType.not_specified
     authors: List[str] = []
-    language: str = ""
+    language: Language = Language.na
     keywords: List[str] = []
     tags: List[str] = []
     extra: Dict = {}
