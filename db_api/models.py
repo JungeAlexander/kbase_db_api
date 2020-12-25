@@ -41,7 +41,7 @@ class User(SqlAlchemyBase):  # type: ignore
 
     id = sa.Column(sa.Integer, primary_key=True, index=True)
     email = sa.Column(sa.String, unique=True, index=True)
-    name = sa.Column(sa.String)
+    username = sa.Column(sa.String)
     hashed_password = sa.Column(sa.String)
     created_date = sa.Column(sa.DateTime, default=datetime.now, index=True)
     last_login = sa.Column(sa.DateTime, default=datetime.now, index=True)

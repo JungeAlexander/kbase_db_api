@@ -170,7 +170,7 @@ class Document(DocumentBase):
 
 class UserBase(BaseModel):
     email: EmailStr
-    name: str
+    username: str
 
 
 class UserCreate(UserBase):
