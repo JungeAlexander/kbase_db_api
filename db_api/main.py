@@ -1,15 +1,20 @@
 from datetime import datetime
 from typing import List
 
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from jose import JWTError, jwt
 from mangum import Mangum
 from sqlalchemy.orm import Session
 from starlette.middleware.cors import CORSMiddleware
 
 from . import crud, schemas
+from .core.config import settings
 from .database import create_session, global_init
 
 global_init()
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 app = FastAPI(
     title="kbase document store",
@@ -33,7 +38,7 @@ app.add_middleware(
 )
 
 
-# Dependency
+# Dependencies
 def get_db():
     db = None
     try:
@@ -41,6 +46,30 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+def get_current_user(
+    token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
+):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(
+            token, settings.JWT_SECRET_KEY, algorithms=[settings.JWT_ALGORITHM]
+        )
+        username: str = payload.get("sub")
+        if username is None:
+            raise credentials_exception
+        token_data = schemas.TokenData(username=username)
+    except JWTError:
+        raise credentials_exception
+    db_user = crud.get_user_by_username(db, username=token_data.username)
+    if db_user is None:
+        raise credentials_exception
+    return db_user
 
 
 @app.post("/documents/", response_model=schemas.Document)
