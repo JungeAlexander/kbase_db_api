@@ -17,7 +17,7 @@ def setup():
     if SessionLocal:
         return
 
-    engine = create_engine(settings.SQLALCHEMY_DATABASE_URL)
+    engine = create_engine(settings.SQLALCHEMY_DATABASE_URI)
     SessionLocal = sessionmaker(bind=engine)
 
     # noinspection PyUnresolvedReferences
