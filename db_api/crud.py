@@ -4,8 +4,6 @@ from typing import Iterable, Set, Tuple
 from passlib.handlers.sha2_crypt import sha512_crypt
 from sqlalchemy.orm import Session
 
-from db_api.models import EntityMention
-
 from . import models, schemas
 
 
