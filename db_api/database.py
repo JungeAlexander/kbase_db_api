@@ -1,10 +1,10 @@
-import os
 from contextlib import contextmanager
 
-from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session, sessionmaker
+
+from .core.config import settings
 
 SqlAlchemyBase = declarative_base()
 
@@ -17,18 +17,7 @@ def setup():
     if SessionLocal:
         return
 
-    folder = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-    load_dotenv(os.path.join(folder, "aws.env"))
-
-    host = os.environ["HOST"]
-    port = os.environ["PORT"]
-    dbname = os.environ["DBNAME"]
-    user = os.environ["DBUSER"]
-    password = os.environ["DBPASSWORD"]
-
-    SQLALCHEMY_DATABASE_URL = f"postgresql://{user}:{password}@{host}:{port}/{dbname}"
-
-    engine = create_engine(SQLALCHEMY_DATABASE_URL)
+    engine = create_engine(settings.SQLALCHEMY_DATABASE_URL)
     SessionLocal = sessionmaker(bind=engine)
 
     # noinspection PyUnresolvedReferences
