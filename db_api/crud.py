@@ -1,10 +1,10 @@
 from datetime import date
 from typing import Iterable, Set, Tuple
 
-from passlib.handlers.sha2_crypt import sha512_crypt
 from sqlalchemy.orm import Session
 
 from . import models, schemas
+from .core import security
 
 
 def get_document(db: Session, document_id: str) -> models.Document:
@@ -56,17 +56,8 @@ def update_document(db: Session, document: schemas.DocumentUpdate) -> models.Doc
     return new_document
 
 
-def get_hash(text: str) -> str:
-    hashed_text = sha512_crypt.encrypt(text, rounds=114241)
-    return hashed_text
-
-
-def verify_hash(hashed: str, plain: str) -> bool:
-    return sha512_crypt.verify(hashed, plain)
-
-
 def create_user(db: Session, user: schemas.UserCreate) -> models.User:
-    hashed_password = get_hash(user.password)
+    hashed_password = security.get_password_hash(user.password)
     db_user = models.User(
         email=user.email, name=user.name, hashed_password=hashed_password
     )
