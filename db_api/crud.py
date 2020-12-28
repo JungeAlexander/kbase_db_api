@@ -93,6 +93,10 @@ def get_users(db: Session, skip: int = 0, limit: int = 100) -> Iterable[models.U
     return db.query(models.User).offset(skip).limit(limit).all()
 
 
+def authenticate_user(db, username, password):
+    pass
+
+
 def create_user_rating(
     db: Session, user_rating: schemas.UserRatingCreate
 ) -> models.UserRating:
