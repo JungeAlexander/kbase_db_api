@@ -73,6 +73,12 @@ def get_current_user(
     return db_user
 
 
+def get_current_active_user(current_user: schemas.User = Depends(get_current_user)):
+    if not current_user.is_active:
+        raise HTTPException(status_code=400, detail="Inactive user")
+    return current_user
+
+
 @app.post("/token", response_model=schemas.Token)
 def login_for_access_token(
     form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
@@ -134,6 +140,11 @@ def read_document(document_id: str, db: Session = Depends(get_db)):
     if db_document is None:
         raise HTTPException(status_code=404, detail="Document not found")
     return db_document
+
+
+@app.get("/users/me/", response_model=schemas.User)
+def read_users_me(current_user: schemas.User = Depends(get_current_active_user)):
+    return current_user
 
 
 @app.post("/users/", response_model=schemas.User)
