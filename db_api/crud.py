@@ -93,8 +93,13 @@ def get_users(db: Session, skip: int = 0, limit: int = 100) -> Iterable[models.U
     return db.query(models.User).offset(skip).limit(limit).all()
 
 
-def authenticate_user(db, username, password):
-    pass
+def authenticate_user(db: Session, username: str, password: str) -> models.User:
+    user = get_user_by_username(db, username=username)
+    if not user:
+        return None
+    if not security.verify_password(password, user.hashed_password):
+        return None
+    return user
 
 
 def create_user_rating(
