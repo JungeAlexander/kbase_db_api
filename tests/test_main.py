@@ -10,8 +10,10 @@ def test_no_auth():
     assert r.status_code == 401, r.text
 
 
-def test_wrong_password():
-    assert False
+def test_wrong_username_password():
+    data_dict = {"username": "nonxistingtestuser", "password": "meaninglesspassword"}
+    r = client.post("/token", data=data_dict)
+    assert r.status_code == 401, r.text
 
 
 def test_create_auth_user():
