@@ -6,9 +6,12 @@ client = TestClient(app)
 
 
 def test_no_auth():
-    r = client.get("/users/me")
-    assert r.status_code == 200
-    assert r.json() == {"bla"}
+    r = client.get("/me")
+    assert r.status_code == 401, r.text
+
+
+def test_wrong_password():
+    assert False
 
 
 def test_create_auth_user():

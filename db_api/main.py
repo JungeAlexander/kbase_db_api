@@ -142,7 +142,7 @@ def read_document(document_id: str, db: Session = Depends(get_db)):
     return db_document
 
 
-@app.get("/users/me/", response_model=schemas.User)
+@app.get("/me", response_model=schemas.User)
 def read_users_me(current_user: schemas.User = Depends(get_current_active_user)):
     return current_user
 
