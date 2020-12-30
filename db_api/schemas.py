@@ -27,9 +27,9 @@ class UserRating(UserRatingCreate):
 
 
 class DocumentSection(str, Enum):
-    title = "title"
-    summary = "summary"
-    full_text = "full_text"
+    title = "Title"  # type: ignore
+    summary = "Summary"
+    full_text = "Full text"
 
 
 class EntityMentionBase(BaseModel):
