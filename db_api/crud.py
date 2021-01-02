@@ -27,7 +27,7 @@ def get_documents(
     return db.query(models.Document).offset(skip).limit(limit).all()
 
 
-def search_document_sumary(
+def search_document_summary(
     db: Session, query: str = "query"
 ) -> Iterable[models.Document]:
     search = "%{}%".format(query)

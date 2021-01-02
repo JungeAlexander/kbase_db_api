@@ -81,6 +81,14 @@ def get_current_active_user(
     return current_user
 
 
+def get_current_active_superuser(
+    current_user: schemas.User = Depends(get_current_user),
+) -> models.User:
+    if not current_user.is_superuser:
+        raise HTTPException(status_code=400, detail="Not enough privileges")
+    return current_user
+
+
 @app.post("/token", response_model=schemas.Token)
 def login_for_access_token(
     form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
@@ -143,12 +151,12 @@ def read_documents(
 
 
 @app.get("/documents/search_summary", response_model=List[schemas.Document])
-def search_document_sumary(
+def search_document_summary(
     query: str = "query",
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_active_user),
 ):
-    documents = crud.search_document_sumary(db, query=query)
+    documents = crud.search_document_summary(db, query=query)
     return documents
 
 
@@ -173,7 +181,7 @@ def read_users_me(current_user: schemas.User = Depends(get_current_active_user))
 def create_user(
     user: schemas.UserCreate,
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_active_user),
+    current_user: models.User = Depends(get_current_active_superuser),
 ):
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
@@ -188,7 +196,7 @@ def read_users(
     skip: int = 0,
     limit: int = 100,
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_active_user),
+    current_user: models.User = Depends(get_current_active_superuser),
 ):
     users = crud.get_users(db, skip=skip, limit=limit)
     return users
@@ -198,7 +206,7 @@ def read_users(
 def read_user(
     user_id: int,
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_active_user),
+    current_user: models.User = Depends(get_current_active_superuser),
 ):
     db_user = crud.get_user(db, user_id=user_id)
     if db_user is None:
@@ -211,7 +219,7 @@ def update_user(
     user_id: int,
     user: schemas.UserUpdate,
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_active_user),
+    current_user: models.User = Depends(get_current_active_superuser),
 ):
     db_user = crud.get_user(db, user_id=user_id)
     if db_user is None:
