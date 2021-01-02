@@ -8,7 +8,7 @@ from mangum import Mangum
 from sqlalchemy.orm import Session
 from starlette.middleware.cors import CORSMiddleware
 
-from . import crud, schemas
+from . import crud, models, schemas
 from .core import security
 from .core.config import settings
 from .database import create_session, global_init
@@ -51,7 +51,7 @@ def get_db():
 
 def get_current_user(
     token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
-):
+) -> models.User:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -73,7 +73,9 @@ def get_current_user(
     return db_user
 
 
-def get_current_active_user(current_user: schemas.User = Depends(get_current_user)):
+def get_current_active_user(
+    current_user: schemas.User = Depends(get_current_user),
+) -> models.User:
     if not current_user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
@@ -100,7 +102,11 @@ def login_for_access_token(
 
 
 @app.post("/documents/", response_model=schemas.Document)
-def create_document(document: schemas.DocumentCreate, db: Session = Depends(get_db)):
+def create_document(
+    document: schemas.DocumentCreate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
+):
     document_id = document.id
     db_document = crud.get_document(db, document_id=document_id)
     if db_document:
@@ -112,7 +118,10 @@ def create_document(document: schemas.DocumentCreate, db: Session = Depends(get_
 
 @app.put("/documents/{document_id}", response_model=schemas.Document)
 def update_document(
-    document_id: str, document: schemas.DocumentUpdate, db: Session = Depends(get_db)
+    document_id: str,
+    document: schemas.DocumentUpdate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
 ):
     db_document = crud.get_document(db, document_id=document_id)
     if not db_document:
@@ -123,19 +132,32 @@ def update_document(
 
 
 @app.get("/documents/", response_model=List[schemas.Document])
-def read_documents(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def read_documents(
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
+):
     documents = crud.get_documents(db, skip=skip, limit=limit)
     return documents
 
 
 @app.get("/documents/search_summary", response_model=List[schemas.Document])
-def search_document_sumary(query: str = "query", db: Session = Depends(get_db)):
+def search_document_sumary(
+    query: str = "query",
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
+):
     documents = crud.search_document_sumary(db, query=query)
     return documents
 
 
 @app.get("/documents/{document_id}", response_model=schemas.Document)
-def read_document(document_id: str, db: Session = Depends(get_db)):
+def read_document(
+    document_id: str,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
+):
     db_document = crud.get_document(db, document_id=document_id)
     if db_document is None:
         raise HTTPException(status_code=404, detail="Document not found")
@@ -148,7 +170,11 @@ def read_users_me(current_user: schemas.User = Depends(get_current_active_user))
 
 
 @app.post("/users/", response_model=schemas.User)
-def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+def create_user(
+    user: schemas.UserCreate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
+):
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
         raise HTTPException(
@@ -158,13 +184,22 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 
 
 @app.get("/users/", response_model=List[schemas.User])
-def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def read_users(
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
+):
     users = crud.get_users(db, skip=skip, limit=limit)
     return users
 
 
 @app.get("/users/{user_id}", response_model=schemas.User)
-def read_user(user_id: int, db: Session = Depends(get_db)):
+def read_user(
+    user_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
+):
     db_user = crud.get_user(db, user_id=user_id)
     if db_user is None:
         raise HTTPException(status_code=404, detail=f"User ID {user_id} not found")
@@ -172,7 +207,12 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
 
 
 @app.put("/users/{user_id}", response_model=schemas.User)
-def update_user(user_id: int, user: schemas.UserUpdate, db: Session = Depends(get_db)):
+def update_user(
+    user_id: int,
+    user: schemas.UserUpdate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
+):
     db_user = crud.get_user(db, user_id=user_id)
     if db_user is None:
         raise HTTPException(status_code=404, detail=f"User ID {user_id} not found")
@@ -182,7 +222,12 @@ def update_user(user_id: int, user: schemas.UserUpdate, db: Session = Depends(ge
 @app.get(
     "/users/{user_id}/user_ratings/{document_id}", response_model=schemas.UserRating
 )
-def get_rating_for_user(user_id: int, document_id: str, db: Session = Depends(get_db)):
+def get_rating_for_user(
+    user_id: int,
+    document_id: str,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
+):
     db_rating = crud.get_user_rating_by_document_and_user(db, document_id, user_id)
     if db_rating is None:
         raise HTTPException(
@@ -200,6 +245,7 @@ def update_rating_for_user(
     document_id: str,
     user_rating: schemas.UserRatingUpdate,
     db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
 ):
     db_rating = crud.get_user_rating_by_document_and_user(db, document_id, user_id)
     if db_rating is None:
@@ -218,14 +264,21 @@ def update_rating_for_user(
 
 
 @app.get("/user_ratings/", response_model=List[schemas.UserRating])
-def read_user_ratings(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def read_user_ratings(
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
+):
     user_ratings = crud.get_user_ratings(db, skip=skip, limit=limit)
     return user_ratings
 
 
 @app.post("/user_ratings/", response_model=schemas.UserRating)
 def create_rating_for_user(
-    user_rating: schemas.UserRatingCreate, db: Session = Depends(get_db)
+    user_rating: schemas.UserRatingCreate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
 ):
     document_id = user_rating.document_id
     user_id = user_rating.user_id
@@ -239,7 +292,11 @@ def create_rating_for_user(
 
 
 @app.post("/entities/", response_model=schemas.Entity)
-def create_entity(entity: schemas.EntityCreate, db: Session = Depends(get_db)):
+def create_entity(
+    entity: schemas.EntityCreate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
+):
     db_entity = crud.get_entity(db, entity_id=entity.id)
     if db_entity:
         raise HTTPException(
@@ -249,13 +306,22 @@ def create_entity(entity: schemas.EntityCreate, db: Session = Depends(get_db)):
 
 
 @app.get("/entities/", response_model=List[schemas.Entity])
-def read_entities(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def read_entities(
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
+):
     entities = crud.get_entities(db, skip=skip, limit=limit)
     return entities
 
 
 @app.get("/entities/{entity_id}", response_model=schemas.Entity)
-def read_entity(entity_id: str, db: Session = Depends(get_db)):
+def read_entity(
+    entity_id: str,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
+):
     db_entity = crud.get_entity(db, entity_id=entity_id)
     if db_entity is None:
         raise HTTPException(status_code=404, detail=f"Entity ID {entity_id} not found")
@@ -264,7 +330,10 @@ def read_entity(entity_id: str, db: Session = Depends(get_db)):
 
 @app.put("/entities/{entity_id}", response_model=schemas.Entity)
 def update_entity(
-    entity_id: str, entity: schemas.EntityUpdate, db: Session = Depends(get_db)
+    entity_id: str,
+    entity: schemas.EntityUpdate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
 ):
     db_entity = crud.get_entity(db, entity_id=entity_id)
     if db_entity is None:
@@ -277,7 +346,10 @@ def update_entity(
     response_model=List[schemas.EntityMention],
 )
 def get_mentions_by_entity_and_document(
-    entity_id: str, document_id: str, db: Session = Depends(get_db)
+    entity_id: str,
+    document_id: str,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
 ):
     db_mentions = crud.get_mentions_by_entity_and_document(db, document_id, entity_id)
     if db_mentions is None:
@@ -291,7 +363,9 @@ def get_mentions_by_entity_and_document(
 
 @app.post("/entity_mentions/", response_model=schemas.EntityMention)
 def create_entity_mention(
-    entity_mention: schemas.EntityMentionCreate, db: Session = Depends(get_db)
+    entity_mention: schemas.EntityMentionCreate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
 ):
     db_document = crud.get_document(db, document_id=entity_mention.document_id)
     if db_document is None:
@@ -310,14 +384,21 @@ def create_entity_mention(
 
 @app.get("/entity_mentions/", response_model=List[schemas.EntityMention])
 def read_entity_mentions(
-    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
 ):
     entity_mentions = crud.get_entity_mentions(db, skip=skip, limit=limit)
     return entity_mentions
 
 
 @app.get("/entity_mentions/{entity_mention_id}", response_model=schemas.EntityMention)
-def read_entity_mention(entity_mention_id: int, db: Session = Depends(get_db)):
+def read_entity_mention(
+    entity_mention_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
+):
     db_entity_mention = crud.get_entity_mention(db, entity_mention_id=entity_mention_id)
     if db_entity_mention is None:
         raise HTTPException(
@@ -331,6 +412,7 @@ def update_entity_mention(
     entity_mention_id: int,
     entity_mention: schemas.EntityMentionUpdate,
     db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
 ):
     db_entity_mention = crud.get_entity_mention(db, entity_mention_id=entity_mention_id)
     if db_entity_mention is None:
@@ -342,7 +424,9 @@ def update_entity_mention(
 
 @app.post("/ner_evaluations/", response_model=schemas.NEREvaluation)
 def create_ner_evaluation(
-    ner_evaluation: schemas.NEREvaluationCreate, db: Session = Depends(get_db)
+    ner_evaluation: schemas.NEREvaluationCreate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
 ):
     db_document = crud.get_document(db, document_id=ner_evaluation.document_id)
     if db_document is None:
@@ -355,14 +439,21 @@ def create_ner_evaluation(
 
 @app.get("/ner_evaluations/", response_model=List[schemas.NEREvaluation])
 def read_ner_evaluations(
-    skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
 ):
     ner_evaluations = crud.get_ner_evaluations(db, skip=skip, limit=limit)
     return ner_evaluations
 
 
 @app.get("/ner_evaluations/{ner_evaluation_id}", response_model=schemas.NEREvaluation)
-def read_ner_evaluation(ner_evaluation_id: int, db: Session = Depends(get_db)):
+def read_ner_evaluation(
+    ner_evaluation_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
+):
     db_ner_evaluation = crud.get_ner_evaluation(db, ner_evaluation_id=ner_evaluation_id)
     if db_ner_evaluation is None:
         raise HTTPException(
@@ -376,6 +467,7 @@ def update_ner_evaluation(
     ner_evaluation_id: int,
     ner_evaluation: schemas.NEREvaluationUpdate,
     db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
 ):
     db_ner_evaluation = crud.get_ner_evaluation(db, ner_evaluation_id=ner_evaluation_id)
     if db_ner_evaluation is None:
