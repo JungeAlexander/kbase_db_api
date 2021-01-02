@@ -46,6 +46,7 @@ class User(SqlAlchemyBase):  # type: ignore
     created_date = sa.Column(sa.DateTime, default=datetime.now, index=True)
     last_login = sa.Column(sa.DateTime, default=datetime.now, index=True)
     is_active = sa.Column(sa.Boolean, default=True)
+    is_superuser = sa.Column(sa.Boolean, default=False)
 
     ratings = relationship("UserRating", back_populates="rated_by")
 
