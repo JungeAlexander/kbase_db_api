@@ -4,7 +4,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session, sessionmaker
 
-from . import crud, schemas
 from .core.config import settings
 
 SqlAlchemyBase = declarative_base()
@@ -34,8 +33,10 @@ def global_init():
     # Table creation is handled by alembic
     # SqlAlchemyBase.metadata.create_all(engine)
 
+    from . import crud, schemas
+
     with session_scope() as db:
-        user = crud.user.get_by_email(db, email=settings.FIRST_SUPERUSER_EMAIL)
+        user = crud.get_user_by_email(db, email=settings.FIRST_SUPERUSER_EMAIL)
         if not user:
             user_in = schemas.UserCreate(
                 username=settings.FIRST_SUPERUSER,
@@ -43,7 +44,7 @@ def global_init():
                 password=settings.FIRST_SUPERUSER_PASSWORD,
                 is_superuser=True,
             )
-            user = crud.user.create(db, obj_in=user_in)  # noqa: F841
+            user = crud.create_user(db, user=user_in)  # noqa: F841
 
 
 def create_session() -> Session:
