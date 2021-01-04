@@ -1,8 +1,8 @@
 """Initial migration
 
-Revision ID: f186678ab376
+Revision ID: 777fcf6e5a81
 Revises:
-Create Date: 2020-10-24 17:01:48.801119
+Create Date: 2021-01-04 09:56:20.616048
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = "f186678ab376"
+revision = "777fcf6e5a81"
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -23,39 +23,26 @@ def upgrade():
         sa.Column("id", sa.String(), nullable=False),
         sa.Column("version", sa.String(), nullable=True),
         sa.Column("source", sa.String(), nullable=True),
-        sa.Column("journal", sa.String(), nullable=True),
-        sa.Column("document_type", sa.String(), nullable=True),
         sa.Column("title", sa.String(), nullable=True),
+        sa.Column("document_type", sa.String(), nullable=True),
         sa.Column("publication_date", sa.Date(), nullable=True),
         sa.Column("update_date", sa.Date(), nullable=True),
         sa.Column("modified_date", sa.DateTime(), nullable=True),
         sa.Column("urls", postgresql.ARRAY(sa.String(), dimensions=1), nullable=True),
-        sa.Column("pmid", sa.Integer(), nullable=True),
-        sa.Column("arxiv_id", sa.String(), nullable=True),
-        sa.Column("license", sa.String(), nullable=True),
-        sa.Column("doi", sa.String(), nullable=True),
         sa.Column("summary", sa.String(), nullable=True),
-        sa.Column("full_text", sa.String(), nullable=True),
+        sa.Column("raw_text", sa.String(), nullable=True),
+        sa.Column("raw_text_format", sa.String(), nullable=True),
+        sa.Column("parsed_text", sa.String(), nullable=True),
+        sa.Column("document_subtype", sa.String(), nullable=True),
         sa.Column(
             "authors", postgresql.ARRAY(sa.String(), dimensions=1), nullable=True
-        ),
-        sa.Column(
-            "affiliations", postgresql.ARRAY(sa.String(), dimensions=1), nullable=True
         ),
         sa.Column("language", sa.String(), nullable=True),
         sa.Column(
             "keywords", postgresql.ARRAY(sa.String(), dimensions=1), nullable=True
         ),
-        sa.Column(
-            "in_citations", postgresql.ARRAY(sa.String(), dimensions=1), nullable=True
-        ),
-        sa.Column(
-            "out_citations", postgresql.ARRAY(sa.String(), dimensions=1), nullable=True
-        ),
         sa.Column("tags", postgresql.ARRAY(sa.String(), dimensions=1), nullable=True),
-        sa.Column(
-            "other_ids", postgresql.ARRAY(sa.String(), dimensions=1), nullable=True
-        ),
+        sa.Column("extra", postgresql.JSONB(astext_type=sa.Text()), nullable=True),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(op.f("ix_documents_id"), "documents", ["id"], unique=False)
@@ -94,11 +81,12 @@ def upgrade():
         "users",
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("email", sa.String(), nullable=True),
-        sa.Column("name", sa.String(), nullable=True),
+        sa.Column("username", sa.String(), nullable=True),
         sa.Column("hashed_password", sa.String(), nullable=True),
         sa.Column("created_date", sa.DateTime(), nullable=True),
         sa.Column("last_login", sa.DateTime(), nullable=True),
         sa.Column("is_active", sa.Boolean(), nullable=True),
+        sa.Column("is_superuser", sa.Boolean(), nullable=True),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(
@@ -155,6 +143,47 @@ def upgrade():
         op.f("ix_entity_mentions_source"), "entity_mentions", ["source"], unique=False
     )
     op.create_table(
+        "ner_evaluations",
+        sa.Column("id", sa.Integer(), nullable=False),
+        sa.Column("document_id", sa.String(), nullable=False),
+        sa.Column("document_section", sa.String(), nullable=True),
+        sa.Column("ner_source", sa.String(), nullable=True),
+        sa.Column("annotation_source", sa.String(), nullable=True),
+        sa.Column("tp", sa.Integer(), nullable=True),
+        sa.Column("tn", sa.Integer(), nullable=True),
+        sa.Column("fp", sa.Integer(), nullable=True),
+        sa.Column("fn", sa.Integer(), nullable=True),
+        sa.Column("precision", sa.Float(), nullable=True),
+        sa.Column("recall", sa.Float(), nullable=True),
+        sa.Column("fscore", sa.Float(), nullable=True),
+        sa.ForeignKeyConstraint(
+            ["document_id"],
+            ["documents.id"],
+        ),
+        sa.PrimaryKeyConstraint("id"),
+    )
+    op.create_index(
+        op.f("ix_ner_evaluations_annotation_source"),
+        "ner_evaluations",
+        ["annotation_source"],
+        unique=False,
+    )
+    op.create_index(
+        op.f("ix_ner_evaluations_document_id"),
+        "ner_evaluations",
+        ["document_id"],
+        unique=False,
+    )
+    op.create_index(
+        op.f("ix_ner_evaluations_id"), "ner_evaluations", ["id"], unique=False
+    )
+    op.create_index(
+        op.f("ix_ner_evaluations_ner_source"),
+        "ner_evaluations",
+        ["ner_source"],
+        unique=False,
+    )
+    op.create_table(
         "user_ratings",
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("document_id", sa.String(), nullable=False),
@@ -197,6 +226,13 @@ def downgrade():
     op.drop_index(op.f("ix_user_ratings_id"), table_name="user_ratings")
     op.drop_index(op.f("ix_user_ratings_document_id"), table_name="user_ratings")
     op.drop_table("user_ratings")
+    op.drop_index(op.f("ix_ner_evaluations_ner_source"), table_name="ner_evaluations")
+    op.drop_index(op.f("ix_ner_evaluations_id"), table_name="ner_evaluations")
+    op.drop_index(op.f("ix_ner_evaluations_document_id"), table_name="ner_evaluations")
+    op.drop_index(
+        op.f("ix_ner_evaluations_annotation_source"), table_name="ner_evaluations"
+    )
+    op.drop_table("ner_evaluations")
     op.drop_index(op.f("ix_entity_mentions_source"), table_name="entity_mentions")
     op.drop_index(
         op.f("ix_entity_mentions_modified_date"), table_name="entity_mentions"
