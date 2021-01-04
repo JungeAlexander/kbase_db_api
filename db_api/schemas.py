@@ -171,6 +171,7 @@ class Document(DocumentBase):
 class UserBase(BaseModel):
     email: EmailStr
     username: str
+    is_superuser: bool = False
 
 
 class UserCreate(UserBase):
@@ -186,7 +187,6 @@ class User(UserBase):
     created_date: datetime
     last_login: datetime
     is_active: bool
-    is_superuser: bool = False
     ratings: List[UserRating] = []
 
     class Config:
