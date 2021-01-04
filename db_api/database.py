@@ -4,6 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session, sessionmaker
 
+from . import crud, schemas
 from .core.config import settings
 
 SqlAlchemyBase = declarative_base()
@@ -21,7 +22,7 @@ def setup():
     SessionLocal = sessionmaker(bind=engine)
 
     # noinspection PyUnresolvedReferences
-    from . import models
+    from . import models  # noqa: F401
 
     return engine
 
@@ -30,7 +31,19 @@ def global_init():
     engine = setup()
     if engine is None:
         return
-    SqlAlchemyBase.metadata.create_all(engine)
+    # Table creation is handled by alembic
+    # SqlAlchemyBase.metadata.create_all(engine)
+
+    with session_scope() as db:
+        user = crud.user.get_by_email(db, email=settings.FIRST_SUPERUSER_EMAIL)
+        if not user:
+            user_in = schemas.UserCreate(
+                username=settings.FIRST_SUPERUSER,
+                email=settings.FIRST_SUPERUSER_EMAIL,
+                password=settings.FIRST_SUPERUSER_PASSWORD,
+                is_superuser=True,
+            )
+            user = crud.user.create(db, obj_in=user_in)  # noqa: F841
 
 
 def create_session() -> Session:
@@ -53,7 +66,7 @@ def session_scope():
     try:
         yield session
         session.commit()
-    except:
+    except:  # noqa: E722
         session.rollback()
         raise
     finally:
