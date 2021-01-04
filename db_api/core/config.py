@@ -15,6 +15,10 @@ class _Settings(BaseSettings):
     DBUSER: str
     DBPASSWORD: str
 
+    FIRST_SUPERUSER: str
+    FIRST_SUPERUSER_EMAIL: str
+    FIRST_SUPERUSER_PASSWORD: str
+
     SQLALCHEMY_DATABASE_URI: Optional[PostgresDsn] = None
 
     @validator("SQLALCHEMY_DATABASE_URI", pre=True)
