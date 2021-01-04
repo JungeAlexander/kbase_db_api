@@ -1,30 +1,28 @@
-from fastapi.testclient import TestClient
+from typing import Dict
 
-from db_api.main import app
+from fastapi.testclient import TestClient
 
 from .utils import random_email, random_lower_string
 
-client = TestClient(app)
 
-
-def test_no_auth():
+def test_no_auth(client: TestClient):
     r = client.get("/me")
     assert r.status_code == 401, r.text
 
 
-def test_wrong_username_password():
+def test_wrong_username_password(client: TestClient):
     data_dict = {"username": "nonxistingtestuser", "password": "meaninglesspassword"}
     r = client.post("/token", data=data_dict)
     assert r.status_code == 401, r.text
 
 
-def test_create_auth_user():
+def test_create_auth_user(client: TestClient, superuser_token_headers: Dict[str, str]):
     email = random_email()
     username = random_lower_string()
     password = random_lower_string()
     # create random user
     user_dict = {"email": email, "username": username, "password": password}
-    r = client.post("/users/", json=user_dict)
+    r = client.post("/users/", json=user_dict, headers=superuser_token_headers)
     assert r.status_code == 200, r.text
     # get token
     data_dict = {"username": username, "password": password}
