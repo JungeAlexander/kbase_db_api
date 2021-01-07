@@ -46,6 +46,12 @@ docker run --name kbase-db -v /Users/alexanderjunge/Code/kbase/db_api/data/pgdat
 psql -h localhost -p 10000 -U postgres
 ```
 
+Initialize database:
+
+```
+poetry run alembic upgrade head
+```
+
 #### FastAPI
 
 ```
