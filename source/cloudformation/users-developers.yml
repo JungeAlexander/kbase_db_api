@@ -39,14 +39,14 @@ Resources:
       Groups:
         - Developers
 
-  userAlexanderJunge:
+  userAJDev:
     Type: "AWS::IAM::User"
     Properties:
-      UserName: "kbase-prod-ajunge"
+      UserName: "ajdev"
 
-      # TODO password from ENV variable
+      # TODO password from ENV variable or manual reset
       LoginProfile:
-        Password: "cH4n63M3N0w!"
+        Password: "cH4n63M3N0w!cH4n63M3N0w!cH4n63M3N0w!"
         PasswordResetRequired: True
       Groups:
         - Developers
