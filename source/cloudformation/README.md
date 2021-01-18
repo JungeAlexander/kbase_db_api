@@ -1,8 +1,8 @@
 # validate template
-aws cloudformation validate-template --template-body file://users-developers.yml
+aws --profile kbasedev cloudformation validate-template --template-body file://users-developers.yml
 
 # create stack
-aws --profile admin cloudformation create-stack --stack-name users-group-developers --template-body file://users-developers.yml  --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM"
+aws --profile kbasedev cloudformation create-stack --stack-name users-group-developers --template-body file://users-developers.yml  --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM"
 
 <!--
 # await creation
@@ -27,14 +27,14 @@ aws --profile admin  iam get-policy-version --policy-arn <policy arn> --version-
 ### Network
 
 # validate template
-aws cloudformation validate-template --template-body file://microservices-network.yml
+aws --profile kbasedev cloudformation validate-template --template-body file://microservices-network.yml
 
 # create the stack for microservices network
-aws --profile dev cloudformation create-stack --stack-name microservices-network --template-body file://microservices-network.yml --parameters ParameterKey=VpcCidrPrefix,ParameterValue=10.0
+aws --profile kbasedev cloudformation create-stack --stack-name microservices-network --template-body file://microservices-network.yml --parameters ParameterKey=VpcCidrPrefix,ParameterValue=10.0
 
 <!--
 # wait for the stack to finish
-aws --profile dev cloudformation wait stack-create-complete --stack-name microservices-network
+aws --profile kbasedev cloudformation wait stack-create-complete --stack-name microservices-network
 
 # now list the exports
 aws --profile dev cloudformation list-exports
@@ -49,10 +49,10 @@ aws --profile dev cloudformation list-exports | jq -r '.Exports[] | "\(.Name): \
 ### Network access
 
 # validate the template
-aws cloudformation validate-template --template-body file://source/cloudformation/network/microservices-internet.yml
+aws --profile kbasedev cloudformation validate-template --template-body file://microservices-internet.yml
 
 # create the stack for microservices network internet access
-aws --profile dev cloudformation create-stack --stack-name microservices-internet --template-body file://source/cloudformation/network/microservices-internet.yml --parameters ParameterKey=NetworkStack,ParameterValue=microservices-network
+aws --profile kbasedev cloudformation create-stack --stack-name microservices-internet --template-body file://microservices-internet.yml --parameters ParameterKey=NetworkStack,ParameterValue=microservices-network
 
 
 <!-- # wait for the stack to finish
@@ -72,10 +72,10 @@ aws --profile dev ec2 describe-route-tables --filters "Name=vpc-id,Values=${VPC_
 
 
 # validate the template
-aws cloudformation validate-template --template-body file://microservices-security-2.yml
+aws --profile kbasedev cloudformation validate-template --template-body file://microservices-security-2.yml
 
 # create the stack for microservices network internet access
-aws --profile dev cloudformation create-stack --stack-name microservices-security --template-body file://microservices-security-2.yml --parameters ParameterKey=NetworkStack,ParameterValue=microservices-network
+aws --profile kbasedev cloudformation create-stack --stack-name microservices-security --template-body file://microservices-security-2.yml --parameters ParameterKey=NetworkStack,ParameterValue=microservices-network
 
 
 <!-- # wait for the stack to finish
@@ -93,16 +93,16 @@ aws --profile dev ec2 describe-network-acls --filters "Name=vpc-id,Values=${VPC_
 ### Database
 
 # get exports from microservices-network cloudformation stack
-aws --profile dev cloudformation list-exports --query 'Exports[].Value'
+aws --profile kbasedev cloudformation list-exports --query 'Exports[].Value'
 
 # limit to just db subnets
-aws --profile dev cloudformation list-exports --query 'Exports[?starts_with(Name, `microservices-network-SubnetDb`) == `true`].[Name,Value]' --output table
+aws --profile kbasedev cloudformation list-exports --query 'Exports[?starts_with(Name, `microservices-network-SubnetDb`) == `true`].[Name,Value]' --output table
 
 # validate template
-aws cloudformation validate-template --template-body file://rds-postgres.yml --query 'Parameters[].[ParameterKey,Description]' --output table
+aws --profile kbasedev cloudformation validate-template --template-body file://rds-postgres.yml --query 'Parameters[].[ParameterKey,Description]' --output table
 
 # create stack
-aws --profile dev cloudformation create-stack --stack-name rds-postgres --template-body file://rds-postgres.yml --parameters ParameterKey=NetworkStack,ParameterValue=microservices-network ParameterKey=Environment,ParameterValue=dev ParameterKey=DBUser,ParameterValue=dbadminpsqlkbase ParameterKey=DBPassword,ParameterValue=oicu8121231!
+aws --profile kbasedev cloudformation create-stack --stack-name rds-postgres --template-body file://rds-postgres.yml --parameters ParameterKey=NetworkStack,ParameterValue=microservices-network ParameterKey=Environment,ParameterValue=dev ParameterKey=DBUser,ParameterValue=dbadminpsqlkbase ParameterKey=DBPassword,ParameterValue=oicu8121231!
 
 # TODO change db password manually
 
