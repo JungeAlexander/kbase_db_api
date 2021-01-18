@@ -44,14 +44,14 @@ Resources:
         - Key: Purpose
           Value: db
         - Key: Service
-          Value: billing
+          Value: knowledge
         - Key: Environment
           Value: !Ref Environment
 
-  BillingServiceDb:
+  KnowledgeServiceDb:
     Type: AWS::RDS::DBInstance
     Properties:
-      DBName: BillingService
+      DBName: KnowledgeService
       DBSubnetGroupName: !Ref MicroservicesDbSubnetGroup
       AllocatedStorage: "100"
       DBInstanceClass: "db.m4.large"
@@ -70,33 +70,33 @@ Resources:
         - Key: Purpose
           Value: db
         - Key: Service
-          Value: billing
+          Value: knowledge
         - Key: Environment
           Value: !Ref Environment
 
-  BillingServiceDbSecurityGroup:
+  KnowledgeServiceDbSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupName: "BillingServiceDb"
-      GroupDescription: "Billing service security"
+      GroupName: "KnowledgeServiceDb"
+      GroupDescription: "Knowledge service security"
       VpcId:
         Fn::ImportValue:
           !Sub ${NetworkStack}-VpcId
 
-  BillingServiceDbSecurityGroupEgress:
+  KnowledgeServiceDbSecurityGroupEgress:
     Type: AWS::EC2::SecurityGroupEgress
     Properties:
-      GroupId: !Ref BillingServiceDbSecurityGroup
+      GroupId: !Ref KnowledgeServiceDbSecurityGroup
       CidrIp:
         Fn::ImportValue:
           !Sub ${NetworkStack}-VpcCidr
       IpProtocol: "-1" # allow all traffic outbound
 
   # allow DB to receive connections
-  BillingServiceDbSecurityGroupIngressAllowPostgres:
+  KnowledgeServiceDbSecurityGroupIngressAllowPostgres:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
-      GroupId: !Ref BillingServiceDbSecurityGroup
+      GroupId: !Ref KnowledgeServiceDbSecurityGroup
       CidrIp:
         Fn::ImportValue:
           !Sub ${NetworkStack}-VpcCidr
