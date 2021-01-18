@@ -29,7 +29,7 @@ python-multipart = "^0.0.5"
 [tool.poetry.dev-dependencies]
 spacy = "^2.3.2"
 scispacy = "^0.3.0"
-pre-commit = "^2.7.1"
+pre-commit = "^2.9.0"
 jupyterlab = "^2.1.5"
 flake8 = "^3.8.3"
 en-ner-craft-md = {url = "https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.3.0/en_ner_craft_md-0.3.0.tar.gz"}
