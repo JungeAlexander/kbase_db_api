@@ -53,17 +53,19 @@ Resources:
     Properties:
       DBName: KnowledgeService
       DBSubnetGroupName: !Ref MicroservicesDbSubnetGroup
-      AllocatedStorage: "100"
-      DBInstanceClass: "db.m4.large"
+      AllocatedStorage: "20"
+      StorageType: "gp2"
+      DBInstanceClass: "db.t2.micro"
       Engine: "postgres"
-      EngineVersion: "9.6.2"
-      Iops: "1000"
+      EngineVersion: "12.5"
+      # Iops: "1000"
       MultiAZ: !If [CreateProdResources, true, false]
       PubliclyAccessible: false
       MasterUsername:
         Ref: "DBUser"
       MasterUserPassword:
         Ref: "DBPassword"
+      BackupRetentionPeriod: 3
       Tags:
         - Key: Scope
           Value: private
