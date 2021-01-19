@@ -3,6 +3,7 @@ out.yml
 .venv/
 __pycache__/
 *.env
+*.pem
 data/cord/metadata.csv
 data/pgdata/
 .python-version

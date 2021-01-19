@@ -114,3 +114,12 @@ aws --profile dev cloudformation describe-stack-events --stack-name rds-postgres
 
 # describe parameters (see db credentials out in plain text!)
 aws --profile dev cloudformation describe-stacks --stack-name postgres --query 'Stacks[0].Parameters' --output table -->
+
+### ECS
+
+#### SSH keys
+
+# generate and save output of private key to a file
+aws --profile dev ec2 create-key-pair --key-name kbase-dev --query 'KeyMaterial' --output text > ./kbase-dev.pem
+# list key pairs
+aws --profile kbasedev ec2 describe-key-pairs
