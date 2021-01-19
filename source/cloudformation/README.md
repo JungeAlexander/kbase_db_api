@@ -115,7 +115,7 @@ aws --profile dev cloudformation describe-stack-events --stack-name rds-postgres
 # describe parameters (see db credentials out in plain text!)
 aws --profile dev cloudformation describe-stacks --stack-name postgres --query 'Stacks[0].Parameters' --output table -->
 
-### ECS
+### EC2
 
 #### SSH keys
 
@@ -123,3 +123,9 @@ aws --profile dev cloudformation describe-stacks --stack-name postgres --query '
 aws --profile dev ec2 create-key-pair --key-name kbase-dev --query 'KeyMaterial' --output text > ./kbase-dev.pem
 # list key pairs
 aws --profile kbasedev ec2 describe-key-pairs
+
+#### Launching instance
+
+aws --profile kbasedev ec2 run-instances --image-id ami-0aef57767f5404a3c --key-name kbase-dev --instance-type t2.nano --associate-public-ip-address # Runs Ubuntu Server 20.04 LTS (HVM), SSD Volume Type
+
+# TODO: get ID of VPC, subnet and security group from cfn and use above
