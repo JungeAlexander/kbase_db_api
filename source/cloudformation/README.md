@@ -126,6 +126,16 @@ aws --profile kbasedev ec2 describe-key-pairs
 
 #### Launching instance
 
-aws --profile kbasedev ec2 run-instances --image-id ami-0aef57767f5404a3c --key-name kbase-dev --instance-type t2.nano --associate-public-ip-address # Runs Ubuntu Server 20.04 LTS (HVM), SSD Volume Type
+# capture VPC, subnet ID to env variable
+VPC_ID=$(aws --profile kbasedev ec2 describe-vpcs --filters "Name=tag:Name,Values=microservices-network" --query 'Vpcs[0].VpcId' --output text) && echo ${VPC_ID}
+SUBNET_ID=$(aws --profile kbasedev ec2 describe-subnets --filters "Name=tag:Name,Values=DMZ C" --query "Subnets[0].SubnetId" --output text) && echo ${SUBNET_ID}
+SECGROUP_ID=$(aws --profile kbasedev ec2 describe-security-groups --filters "Name=vpc-id,Values=${VPC_ID}" "Name=group-name,Values=default" --query "SecurityGroups[0].GroupId" --output text) && echo ${SECGROUP_ID}
 
-# TODO: get ID of VPC, subnet and security group from cfn and use above
+aws --profile kbasedev ec2 run-instances --image-id ami-0aef57767f5404a3c --key-name kbase-dev --instance-type t2.nano --subnet-id ${SUBNET_ID} --security-group-ids ${SECGROUP_ID} --associate-public-ip-address # Runs Ubuntu Server 20.04 LTS (HVM), SSD Volume Type
+
+#### Connect to instance via public IP
+MY_IP=$(curl ifconfig.me) && echo ${MY_IP}
+PUB_IP=$(aws --profile kbasedev ec2 describe-instances --query 'Reservations[0].Instances[0].PublicIpAddress' --output text) && echo ${PUB_IP}
+aws --profile kbasedev ec2 authorize-security-group-ingress --group-id ${SECGROUP_ID} --protocol tcp --port 22 --cidr "${PUB_IP}/32"
+
+ssh -i ./kbase-dev.pem ec2-user@${PUB_IP}
