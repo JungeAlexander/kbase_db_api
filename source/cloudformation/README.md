@@ -129,6 +129,7 @@ aws --profile kbasedev ec2 describe-key-pairs
 # capture VPC, subnet ID to env variable
 VPC_ID=$(aws --profile kbasedev ec2 describe-vpcs --filters "Name=tag:Name,Values=microservices-network" --query 'Vpcs[0].VpcId' --output text) && echo ${VPC_ID}
 SUBNET_ID=$(aws --profile kbasedev ec2 describe-subnets --filters "Name=tag:Name,Values=DMZ C" --query "Subnets[0].SubnetId" --output text) && echo ${SUBNET_ID}
+NACL_ID=$(aws --profile kbasedev ec2 describe-network-acls --filters "Name=association.subnet-id,Values=${SUBNET_ID}" --query "NetworkAcls[0].Associations[0].NetworkAclId" --output text) && echo ${NACL_ID}
 SECGROUP_ID=$(aws --profile kbasedev ec2 describe-security-groups --filters "Name=vpc-id,Values=${VPC_ID}" "Name=group-name,Values=default" --query "SecurityGroups[0].GroupId" --output text) && echo ${SECGROUP_ID}
 
 <!--
@@ -151,5 +152,11 @@ aws --profile kbasedev ec2 run-instances --image-id ami-0aef57767f5404a3c --key-
 MY_IP=$(curl ifconfig.me) && echo ${MY_IP}
 PUB_IP=$(aws --profile kbasedev ec2 describe-instances --query 'Reservations[0].Instances[0].PublicIpAddress' --output text) && echo ${PUB_IP}
 aws --profile kbasedev ec2 authorize-security-group-ingress --group-id ${SECGROUP_ID} --protocol tcp --port 22 --cidr "${MY_IP}/32"
+RULE_NUM=130
+<!--
+aws --profile kbasedev ec2 delete-network-acl-entry --network-acl-id ${NACL_ID} --ingress --rule-number ${RULE_NUM}
+-->
+aws --profile kbasedev ec2 create-network-acl-entry --network-acl-id ${NACL_ID} --ingress --rule-number ${RULE_NUM} --protocol tcp --port-range From=22,To=22 --cidr-block "${MY_IP}/32" --rule-action allow
+
 
 ssh -i ./kbase-dev.pem ubuntu@${PUB_IP}
