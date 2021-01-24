@@ -115,6 +115,12 @@ aws --profile dev cloudformation describe-stack-events --stack-name rds-postgres
 # describe parameters (see db credentials out in plain text!)
 aws --profile dev cloudformation describe-stacks --stack-name postgres --query 'Stacks[0].Parameters' --output table -->
 
+### S3
+
+aws --profile kbasedev cloudformation validate-template --template-body file://s3.yml
+
+aws --profile kbasedev cloudformation create-stack --stack-name s3 --template-body file://s3.yml --parameters ParameterKey=MyBucketName,ParameterValue=${DB_API_LAMBDA_S3_BUCKET} # get from .env file
+
 ### EC2
 
 #### SSH keys
