@@ -1,0 +1,33 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Lambda DB API"
+
+Resources:
+  LambdaDBAPIExecutionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: LambdaDBAPIExecution
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+          # a stock AWS policy that includes Cloudwatch Logs and S3 access
+        - arn:aws:iam::aws:policy/AWSLambdaExecute
+
+      Path: /
+      Policies:
+        - PolicyName: "AccessKnowledgeServiceDB"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "rds-db:connect"
+                Resource: "arn:aws:rds-db:<region>:<account-id>:dbuser:<DbiResourceId>/<db-user-name>"
+                # See https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.IAMPolicy.html

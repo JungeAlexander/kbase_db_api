@@ -121,6 +121,10 @@ aws --profile kbasedev cloudformation validate-template --template-body file://s
 
 aws --profile kbasedev cloudformation create-stack --stack-name s3 --template-body file://s3.yml --parameters ParameterKey=MyBucketName,ParameterValue=${DB_API_LAMBDA_S3_BUCKET} # get from .env file
 
+### Roles
+
+TODO: aws --profile kbasedev rds describe-db-instances --filters "Name=db-name,Values=KnowledgeService" --query "DBInstances[0].[DbiResourceId]" --output text
+
 ### EC2
 
 #### SSH keys
