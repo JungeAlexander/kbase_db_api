@@ -127,6 +127,13 @@ aws --profile kbasedev cloudformation validate-template --template-body file://r
 
 aws --profile kbasedev cloudformation create-stack --stack-name roles --template-body file://roles.yml --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM"
 
+### Lambda deployment
+
+sam validate
+sam build --use-container --debug -m requirements_lambda.txt
+sam package --s3-bucket ${DB_API_LAMBDA_S3_BUCKET} --output-template-file out.yml --region eu-west-1
+sam deploy --template-file out.yml --stack-name db-api-lambda --region eu-west-1 --no-fail-on-empty-changeset # --capabilities CAPABILITY_IAM
+
 ### EC2
 
 #### SSH keys

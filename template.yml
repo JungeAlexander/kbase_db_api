@@ -1,31 +1,31 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-    fastAPI aws lambda example
+    API Gateway and Lambda for fastAPI-based DB API
 Resources:
-    FastapiExampleLambda:
+    DBAPILambda:
         Type: AWS::Serverless::Function
         Properties:
             Events:
                 ApiEvent:
                     Properties:
                         RestApiId:
-                            Ref: FastapiExampleGateway
+                            Ref: DBAPILambdaGateway
                         Path: /{proxy+}
                         Method: ANY
                     Type: Api
-            FunctionName: fastapi-lambda-example
+            FunctionName: fastapi-db-api-lambda
             CodeUri: ./
             Handler: db_api.main.handler
-            Runtime: python3.7
+            Runtime: python3.8
             Timeout: 300 # timeout of your lambda function
             MemorySize: 128 # memory size of your lambda function
-            Description: fastAPI aws lambda example
+            Description: Lambda for fastAPI-based DB API
             # other options, see ->
             # https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-specification-template-anatomy-globals.html#sam-specification-template-anatomy-globals-supported-resources-and-properties
-            Role: !Sub arn:aws:iam::${AWS::AccountId}:role/dbapilambdarole
+            Role: !Sub arn:aws:iam::${AWS::AccountId}:role/LambdaDBAPIExecutionRole
 
-    FastapiExampleGateway:
+    DBAPILambdaGateway:
         Type: AWS::Serverless::Api
         Properties:
             StageName: prod
