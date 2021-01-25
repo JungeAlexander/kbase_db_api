@@ -19,15 +19,16 @@ Resources:
       ManagedPolicyArns:
           # a stock AWS policy that includes Cloudwatch Logs and S3 access
         - arn:aws:iam::aws:policy/AWSLambdaExecute
+        - arn:aws:iam::aws:policy/AmazonRDSFullAccess
 
       Path: /
-      Policies:
-        - PolicyName: "AccessKnowledgeServiceDB"
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: "Allow"
-                Action:
-                  - "rds-db:connect"
-                Resource: "arn:aws:rds-db:<region>:<account-id>:dbuser:<DbiResourceId>/<db-user-name>"
-                # See https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.IAMPolicy.html
+      # Policies:
+      #   - PolicyName: "AccessKnowledgeServiceDB"
+      #     PolicyDocument:
+      #       Version: "2012-10-17"
+      #       Statement:
+      #         - Effect: "Allow"
+      #           Action:
+      #             - "rds-db:connect"
+      #           Resource: "arn:aws:rds-db:<region>:<account-id>:dbuser:<DbiResourceId>/<db-user-name>"
+      #           # See https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.IAMPolicy.html
