@@ -123,7 +123,9 @@ aws --profile kbasedev cloudformation create-stack --stack-name s3 --template-bo
 
 ### Roles
 
-TODO: aws --profile kbasedev rds describe-db-instances --filters "Name=db-name,Values=KnowledgeService" --query "DBInstances[0].[DbiResourceId]" --output text
+aws --profile kbasedev cloudformation validate-template --template-body file://roles.yml
+
+aws --profile kbasedev cloudformation create-stack --stack-name roles --template-body file://roles.yml --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM"
 
 ### EC2
 
