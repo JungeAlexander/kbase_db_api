@@ -128,11 +128,18 @@ aws --profile kbasedev cloudformation validate-template --template-body file://r
 aws --profile kbasedev cloudformation create-stack --stack-name roles --template-body file://roles.yml --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM"
 
 ### Lambda deployment
+VPC_ID=$(aws --profile kbasedev ec2 describe-vpcs --filters "Name=tag:Name,Values=microservices-network" --query 'Vpcs[0].VpcId' --output text) && echo ${VPC_ID}
+SUBNET_ID=$(aws --profile kbasedev ec2 describe-subnets --filters "Name=tag:Name,Values=DMZ C" --query "Subnets[0].SubnetId" --output text) && echo ${SUBNET_ID}
+NACL_ID=$(aws --profile kbasedev ec2 describe-network-acls --filters "Name=association.subnet-id,Values=${SUBNET_ID}" --query "NetworkAcls[0].Associations[0].NetworkAclId" --output text) && echo ${NACL_ID}
+SECGROUP_ID=$(aws --profile kbasedev ec2 describe-security-groups --filters "Name=vpc-id,Values=${VPC_ID}" "Name=group-name,Values=default" --query "SecurityGroups[0].GroupId" --output text) && echo ${SECGROUP_ID}
 
+cd ../../
+export AWS_PROFILE=kbasedev
 sam validate
 sam build --use-container --debug -m requirements_lambda.txt
 sam package --s3-bucket ${DB_API_LAMBDA_S3_BUCKET} --output-template-file out.yml --region eu-west-1
-sam deploy --template-file out.yml --stack-name db-api-lambda --region eu-west-1 --no-fail-on-empty-changeset # --capabilities CAPABILITY_IAM
+sam deploy --template-file out.yml --stack-name db-api-lambda --region eu-west-1 --no-fail-on-empty-changeset # --parameter-overrides VpcId=${VPC_ID} Subnets=${SUBNET_ID}  --capabilities CAPABILITY_IAM
+cd -
 
 ### EC2
 
@@ -146,10 +153,6 @@ aws --profile kbasedev ec2 describe-key-pairs
 #### Launching instance
 
 # capture VPC, subnet ID to env variable
-VPC_ID=$(aws --profile kbasedev ec2 describe-vpcs --filters "Name=tag:Name,Values=microservices-network" --query 'Vpcs[0].VpcId' --output text) && echo ${VPC_ID}
-SUBNET_ID=$(aws --profile kbasedev ec2 describe-subnets --filters "Name=tag:Name,Values=DMZ C" --query "Subnets[0].SubnetId" --output text) && echo ${SUBNET_ID}
-NACL_ID=$(aws --profile kbasedev ec2 describe-network-acls --filters "Name=association.subnet-id,Values=${SUBNET_ID}" --query "NetworkAcls[0].Associations[0].NetworkAclId" --output text) && echo ${NACL_ID}
-SECGROUP_ID=$(aws --profile kbasedev ec2 describe-security-groups --filters "Name=vpc-id,Values=${VPC_ID}" "Name=group-name,Values=default" --query "SecurityGroups[0].GroupId" --output text) && echo ${SECGROUP_ID}
 
 <!--
 # launch instance in default VPC
