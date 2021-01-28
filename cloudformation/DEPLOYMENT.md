@@ -133,14 +133,12 @@ SUBNET_ID=$(aws --profile kbasedev ec2 describe-subnets --filters "Name=tag:Name
 NACL_ID=$(aws --profile kbasedev ec2 describe-network-acls --filters "Name=association.subnet-id,Values=${SUBNET_ID}" --query "NetworkAcls[0].Associations[0].NetworkAclId" --output text) && echo ${NACL_ID}
 SECGROUP_ID=$(aws --profile kbasedev ec2 describe-security-groups --filters "Name=vpc-id,Values=${VPC_ID}" "Name=group-name,Values=default" --query "SecurityGroups[0].GroupId" --output text) && echo ${SECGROUP_ID}
 
-cd ../../
 export AWS_PROFILE=kbasedev
-sam validate
-sam build --use-container --debug -m requirements_lambda.txt
-sam package --s3-bucket ${DB_API_LAMBDA_S3_BUCKET} --output-template-file out.yml --region eu-west-1
-sam deploy --template-file out.yml --stack-name db-api-lambda --region eu-west-1 --no-fail-on-empty-changeset \
+sam validate --template-file dbapi_lambda.yml
+sam build --template-file dbapi_lambda.yml --use-container --debug -m requirements_dbapi_lambda.txt
+sam package --template-file dbapi_lambda.yml --output-template-file dbapi_lambda_out.yml --s3-bucket ${DB_API_LAMBDA_S3_BUCKET} --region eu-west-1
+sam deploy --template-file dbapi_lambda_out.yml --stack-name db-api-lambda --region eu-west-1 --no-fail-on-empty-changeset \
   --capabilities CAPABILITY_IAM # --parameter-overrides VpcId=${VPC_ID} Subnets=${SUBNET_ID}
-cd -
 
 ### EC2
 
