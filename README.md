@@ -55,5 +55,6 @@ poetry run alembic upgrade head
 #### FastAPI
 
 ```
+cd source/
 poetry run uvicorn db_api.main:app --reload
 ```
