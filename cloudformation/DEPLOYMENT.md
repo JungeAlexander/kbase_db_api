@@ -135,10 +135,10 @@ SECGROUP_ID=$(aws --profile kbasedev ec2 describe-security-groups --filters "Nam
 
 export AWS_PROFILE=kbasedev
 sam validate --template-file dbapi_lambda.yml
-sam build --template-file dbapi_lambda.yml --use-container --debug -m requirements_dbapi_lambda.txt
-sam package --template-file dbapi_lambda.yml --output-template-file dbapi_lambda_out.yml --s3-bucket ${DB_API_LAMBDA_S3_BUCKET} --region eu-west-1
-sam deploy --template-file dbapi_lambda_out.yml --stack-name db-api-lambda --region eu-west-1 --no-fail-on-empty-changeset \
-  --capabilities CAPABILITY_IAM # --parameter-overrides VpcId=${VPC_ID} Subnets=${SUBNET_ID}
+sam build --template-file dbapi_lambda.yml --use-container
+sam package --s3-bucket ${DB_API_LAMBDA_S3_BUCKET} --region eu-west-1
+sam deploy --stack-name db-api-lambda --s3-bucket ${DB_API_LAMBDA_S3_BUCKET} --region eu-west-1 --no-fail-on-empty-changeset \
+  --capabilities CAPABILITY_IAM --parameter-overrides VpcId=${VPC_ID} Subnets=${SUBNET_ID} SecurityGroups=${SECGROUP_ID}
 
 ### EC2
 

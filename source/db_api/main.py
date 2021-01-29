@@ -13,7 +13,7 @@ from .core import security
 from .core.config import settings
 from .database import create_session, global_init
 
-global_init()
+# global_init()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -21,7 +21,7 @@ app = FastAPI(
     title="kbase document store",
     description="Retrieve, update, and recommend documents, entities and mentions in kbase.",
     # version="v01",
-    # openapi_prefix="/prod",
+    openapi_prefix="/" + settings.DBAPI_STAGE,
 )
 
 origins = [
