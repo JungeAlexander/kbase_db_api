@@ -52,6 +52,13 @@ Initialize database:
 poetry run alembic upgrade head
 ```
 
+Setup initial users:
+
+```
+cd source
+poetry run python db_api/init_data.py
+```
+
 #### FastAPI
 
 ```
