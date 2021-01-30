@@ -8,12 +8,10 @@ from mangum import Mangum
 from sqlalchemy.orm import Session
 from starlette.middleware.cors import CORSMiddleware
 
-from . import crud, models, schemas
-from .core import security
-from .core.config import settings
-from .database import create_session, global_init
-
-# global_init()
+from db_api import crud, models, schemas
+from db_api.core import security
+from db_api.core.config import settings
+from db_api.database import create_session
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 

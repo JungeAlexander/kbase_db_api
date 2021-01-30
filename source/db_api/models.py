@@ -5,7 +5,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects.postgresql import ARRAY, JSONB
 from sqlalchemy.orm import relationship
 
-from .database import SqlAlchemyBase
+from db_api.database import SqlAlchemyBase
 
 
 class Document(SqlAlchemyBase):  # type: ignore

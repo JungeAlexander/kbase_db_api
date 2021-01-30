@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session, sessionmaker
 
-from .core.config import settings
+from db_api.core.config import settings
 
 SqlAlchemyBase = declarative_base()
 
@@ -33,7 +33,7 @@ def global_init():
     # Table creation is handled by alembic
     # SqlAlchemyBase.metadata.create_all(engine)
 
-    from . import crud, schemas
+    from db_api import crud, schemas
 
     with session_scope() as db:
         user = crud.get_user_by_email(db, email=settings.FIRST_SUPERUSER_EMAIL)
@@ -50,6 +50,9 @@ def global_init():
 def create_session() -> Session:
     global SessionLocal
 
+    if SessionLocal is None:
+        setup()
+
     session: Session = SessionLocal()
 
     session.expire_on_commit = False
@@ -61,6 +64,9 @@ def create_session() -> Session:
 def session_scope():
     """Provide a transactional scope around a series of operations."""
     global SessionLocal
+
+    if SessionLocal is None:
+        setup()
 
     session: Session = SessionLocal()
 

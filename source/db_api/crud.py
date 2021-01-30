@@ -3,8 +3,8 @@ from typing import Iterable, Set, Tuple
 
 from sqlalchemy.orm import Session
 
-from . import models, schemas
-from .core import security
+from db_api import models, schemas
+from db_api.core import security
 
 
 def get_document(db: Session, document_id: str) -> models.Document:
