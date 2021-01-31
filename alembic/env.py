@@ -33,7 +33,7 @@ fileConfig(config.config_file_name)
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-folder = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "source"))
 sys.path.insert(0, folder)
 from db_api.database import SqlAlchemyBase, setup
 
