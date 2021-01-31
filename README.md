@@ -56,6 +56,7 @@ Setup initial users:
 
 ```
 cd source
+export PYTHONPATH=`pwd`:${PYTHONPATH}
 poetry run python db_api/init_data.py
 ```
 

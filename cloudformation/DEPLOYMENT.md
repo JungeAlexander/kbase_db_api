@@ -138,7 +138,10 @@ sam validate --template-file dbapi_lambda.yml
 sam build --template-file dbapi_lambda.yml --use-container
 sam package --s3-bucket ${DB_API_LAMBDA_S3_BUCKET} --region eu-west-1
 sam deploy --stack-name db-api-lambda --s3-bucket ${DB_API_LAMBDA_S3_BUCKET} --region eu-west-1 --no-fail-on-empty-changeset \
-  --capabilities CAPABILITY_IAM --parameter-overrides VpcId=${VPC_ID} Subnets=${SUBNET_ID} SecurityGroups=${SECGROUP_ID}
+  --capabilities CAPABILITY_IAM --parameter-overrides \
+    VpcId=${VPC_ID} \
+    Subnets=${SUBNET_ID} \
+    SecurityGroups=${SECGROUP_ID}
 
 ### EC2
 
@@ -151,27 +154,12 @@ aws --profile kbasedev ec2 describe-key-pairs
 
 #### Launching instance
 
-# capture VPC, subnet ID to env variable
-
-<!--
-# launch instance in default VPC
-aws --profile kbasedev ec2 run-instances --image-id ami-0aef57767f5404a3c --key-name kbase-dev --instance-type t2.nano --associate-public-ip-address # Runs Ubuntu Server 20.04 LTS (HVM), SSD Volume Type
-
-# open ssh from my ip
-aws --profile kbasedev ec2 authorize-security-group-ingress --group-id <security group id> --protocol tcp --port 22 --cidr "$(dig +short myip.opendns.com @resolver1.opendns.com)/32"
-
-# get public IP of instance
-aws --profile kbasedev ec2 describe-instances --query 'Reservations[0].Instances[0].PublicIpAddress' --output text
-
-# shell into instance
-ssh -i ./lab.pem ubuntu@<public ip>
--->
-
 aws --profile kbasedev ec2 run-instances --image-id ami-0aef57767f5404a3c --key-name kbase-dev --instance-type t2.nano --subnet-id ${SUBNET_ID} --security-group-ids ${SECGROUP_ID} --associate-public-ip-address # Runs Ubuntu Server 20.04 LTS (HVM), SSD Volume Type
 
 #### Connect to instance via public IP
 MY_IP=$(curl ifconfig.me) && echo ${MY_IP}
 PUB_IP=$(aws --profile kbasedev ec2 describe-instances --query 'Reservations[0].Instances[0].PublicIpAddress' --output text) && echo ${PUB_IP}
+
 aws --profile kbasedev ec2 authorize-security-group-ingress --group-id ${SECGROUP_ID} --protocol tcp --port 22 --cidr "${MY_IP}/32"
 RULE_NUM=130
 <!--
