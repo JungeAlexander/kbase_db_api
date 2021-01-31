@@ -2,6 +2,15 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
     API Gateway and Lambda for fastAPI-based DB API
+
+Parameters:
+  NetworkStack:
+    Type: "String"
+    Description: "Network stack to apply to."
+  MySecurityGroupID:
+    Type: "String"
+    Description: "Security group ID."
+
 Resources:
     DBAPILambda:
         Type: AWS::Serverless::Function
@@ -24,6 +33,21 @@ Resources:
             # other options, see ->
             # https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-specification-template-anatomy-globals.html#sam-specification-template-anatomy-globals-supported-resources-and-properties
             Role: !Sub arn:aws:iam::${AWS::AccountId}:role/LambdaDBAPIExecution
+            VpcConfig:
+                SecurityGroupIds:
+                    - !Sub ${MySecurityGroupID}
+                SubnetIds:
+                    - Fn::ImportValue:
+                        !Sub ${NetworkStack}-DmzSubnetAId
+                    - Fn::ImportValue:
+                        !Sub ${NetworkStack}-DmzSubnetBId
+                    - Fn::ImportValue:
+                        !Sub ${NetworkStack}-DmzSubnetCId
+            Tags:
+                'Scope': 'public'
+                'Purpose': 'API'
+                'Service': 'knowledge'
+
 
     DBAPILambdaGateway:
         Type: AWS::Serverless::Api
