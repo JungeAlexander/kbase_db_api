@@ -148,7 +148,7 @@ def read_documents(
     return documents
 
 
-@app.get("/documents/ids/", response_model=List[schemas.Document])
+@app.get("/documents/ids/", response_model=List[schemas.ID])
 def read_document_ids(
     skip: int = 0,
     limit: int = 100,

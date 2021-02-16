@@ -168,6 +168,13 @@ class Document(DocumentBase):
         orm_mode = True
 
 
+class ID(BaseModel):
+    id: str
+
+    class Config:
+        orm_mode = True
+
+
 class UserBase(BaseModel):
     email: EmailStr
     username: str
