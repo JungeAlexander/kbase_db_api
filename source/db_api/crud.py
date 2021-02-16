@@ -27,6 +27,12 @@ def get_documents(
     return db.query(models.Document).offset(skip).limit(limit).all()
 
 
+def get_document_ids(
+    db: Session, skip: int = 0, limit: int = 100
+) -> Iterable[models.Document]:
+    return db.query(models.Document.id).offset(skip).limit(limit).all()
+
+
 def search_document_summary(
     db: Session, query: str = "query"
 ) -> Iterable[models.Document]:

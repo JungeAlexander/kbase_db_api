@@ -148,6 +148,17 @@ def read_documents(
     return documents
 
 
+@app.get("/documents/ids/", response_model=List[schemas.Document])
+def read_document_ids(
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user),
+):
+    documents = crud.get_document_ids(db, skip=skip, limit=limit)
+    return documents
+
+
 @app.get("/documents/search_summary", response_model=List[schemas.Document])
 def search_document_summary(
     query: str = "query",
