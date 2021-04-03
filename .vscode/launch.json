@@ -1,12 +1,15 @@
 {
     "configurations": [
         {
-            "name": "Python: Current File",
+            "name": "Python: fastAPI",
             "type": "python",
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "cwd": "${workspaceFolder}"
+            "cwd": "${workspaceFolder}/source",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/source"
+            }
         }
     ]
 }

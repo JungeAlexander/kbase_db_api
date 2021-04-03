@@ -66,3 +66,10 @@ poetry run python db_api/init_data.py
 cd source/
 poetry run uvicorn db_api.main:app --reload
 ```
+
+Or:
+
+```
+export PYTHONPATH=`pwd`:$PYTHONPATH
+poetry run python db_api/main.py
+```

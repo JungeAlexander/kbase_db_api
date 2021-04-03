@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "/Users/alexanderjunge/Library/Caches/pypoetry/virtualenvs/kbase-db-api-CmWEyvr--py3.8",
+    "python.pythonPath": "/Users/alexanderjunge/Library/Caches/pypoetry/virtualenvs/kbase-db-api-CmWEyvr--py3.8/bin/python",
     "python.linting.pylintEnabled": false,
     "python.linting.flake8Enabled": true,
     "python.linting.enabled": true,
