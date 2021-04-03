@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from typing import List
 
+import uvicorn
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
@@ -495,3 +496,11 @@ def update_ner_evaluation(
 
 
 handler = Mangum(app, enable_lifespan=False)
+
+
+def main():
+    uvicorn.run(app, host="127.0.0.1", port=8000, debug=True)
+
+
+if __name__ == "__main__":
+    main()
