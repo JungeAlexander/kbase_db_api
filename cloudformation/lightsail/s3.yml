@@ -1,0 +1,48 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "S3 Buckets"
+
+Parameters:
+  MyBucketName:
+    Type: "String"
+    Description: "Bucket name to use"
+
+Resources:
+  BucketForDBAPILambda:
+    # http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket.html
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName: !Sub ${MyBucketName}
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+    DeletionPolicy: Delete
+
+  BucketPolicyForDBAPILambda:
+    # http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-policy.html
+    Type: "AWS::S3::BucketPolicy"
+    Properties:
+      Bucket: !Ref BucketForDBAPILambda
+      PolicyDocument:
+        Statement:
+            # prevent uploads if server side encryption was not set since this *may include credentials*
+          - Action: "s3:PutObject"
+            Effect: "Deny"
+            Principal: "*"
+            Resource: !Sub arn:aws:s3:::${MyBucketName}/*
+            Condition:
+              StringNotEquals:
+                s3:x-amz-server-side-encryption: "AES256"
+
+Outputs:
+  VpcId:
+      Description : "DB API Lambda Bucket ID"
+      Value:  !Ref BucketForDBAPILambda
+      Export:
+        Name: !Sub ${AWS::StackName}-DBAPILambdaBucket

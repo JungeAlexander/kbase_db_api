@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+    API Gateway and Lambda for fastAPI-based DB API
+
+Resources:
+    DBAPILambdaPublic:
+        Type: AWS::Serverless::Function
+        Properties:
+            Events:
+                ApiEvent:
+                    Properties:
+                        RestApiId:
+                            Ref: DBAPILambdaPublicGateway
+                        Path: /{proxy+}
+                        Method: ANY
+                    Type: Api
+            FunctionName: fastapi-db-api-lambda-public
+            CodeUri: ../../source/
+            Handler: db_api.main.handler
+            Runtime: python3.8
+            Timeout: 300 # timeout of your lambda function
+            MemorySize: 128 # memory size of your lambda function
+            Description: Lambda for fastAPI-based DB API
+            # other options, see ->
+            # https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-specification-template-anatomy-globals.html#sam-specification-template-anatomy-globals-supported-resources-and-properties
+            Role: !Sub arn:aws:iam::${AWS::AccountId}:role/LambdaDBAPIExecution
+            Tags:
+                'Scope': 'public'
+                'Purpose': 'API'
+                'Service': 'knowledge'
+
+
+    DBAPILambdaPublicGateway:
+        Type: AWS::Serverless::Api
+        Properties:
+            StageName: dev
+            OpenApiVersion: '3.0.0'
