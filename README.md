@@ -52,13 +52,15 @@ Initialize database:
 poetry run alembic upgrade head
 ```
 
-Setup initial users:
+Setup initial superuser:
 
 ```
 cd source
 export PYTHONPATH=`pwd`:${PYTHONPATH}
 poetry run python db_api/init_data.py
 ```
+
+And further users for apps etc by running `notebooks/20200106_machine_tokens.ipynb`.
 
 #### FastAPI
 
