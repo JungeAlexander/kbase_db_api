@@ -26,6 +26,8 @@ arrow = "^0.17.0"
 python-jose = {extras = ["cryptography"], version = "^3.2.0"}
 python-multipart = "^0.0.5"
 cryptography = "^3.4.5"
+fastapi-chameleon = {git = "https://github.com/JungeAlexander/fastapi-chameleon.git", rev = "main"}
+aiofiles = "^0.6.0"
 
 [tool.poetry.dev-dependencies]
 spacy = "^2.3.2"
