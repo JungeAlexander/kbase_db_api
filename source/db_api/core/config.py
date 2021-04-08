@@ -21,6 +21,8 @@ class _Settings(BaseSettings):
 
     DBAPI_STAGE: str
 
+    API_V1_STR: str = "/api/v1"
+
     SQLALCHEMY_DATABASE_URI: Optional[PostgresDsn] = None
 
     @validator("SQLALCHEMY_DATABASE_URI", pre=True)
