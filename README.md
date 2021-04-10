@@ -69,9 +69,10 @@ cd source/
 poetry run uvicorn db_api.main:app --reload
 ```
 
-Or:
+Or, during development:
 
 ```
+cd source/
 export PYTHONPATH=`pwd`:$PYTHONPATH
 poetry run python db_api/main.py
 ```
