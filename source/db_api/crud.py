@@ -35,10 +35,9 @@ def search_document_summary(
     db: Session, query: str = "query"
 ) -> Iterable[models.Document]:
     search = "%{}%".format(query)
-    documents = (
+    return (
         db.query(models.Document).filter(models.Document.summary.ilike(search)).all()  # type: ignore
     )
-    return documents
 
 
 def create_document(db: Session, document: schemas.DocumentCreate) -> models.Document:

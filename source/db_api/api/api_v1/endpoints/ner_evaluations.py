@@ -31,8 +31,7 @@ def read_ner_evaluations(
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_active_user),
 ):
-    ner_evaluations = crud.get_ner_evaluations(db, skip=skip, limit=limit)
-    return ner_evaluations
+    return crud.get_ner_evaluations(db, skip=skip, limit=limit)
 
 
 @router.get("/{ner_evaluation_id}", response_model=schemas.NEREvaluation)

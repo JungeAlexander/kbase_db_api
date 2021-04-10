@@ -31,8 +31,7 @@ def read_documents(
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_active_user),
 ):
-    documents = crud.get_documents(db, skip=skip, limit=limit)
-    return documents
+    return crud.get_documents(db, skip=skip, limit=limit)
 
 
 @router.put("/{document_id}", response_model=schemas.Document)
@@ -69,8 +68,7 @@ def read_document_ids(
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_active_user),
 ):
-    documents = crud.get_document_ids(db, skip=skip, limit=limit)
-    return documents
+    return crud.get_document_ids(db, skip=skip, limit=limit)
 
 
 @router.get("/search_summary", response_model=List[schemas.Document])
@@ -79,5 +77,4 @@ def search_document_summary(
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_active_user),
 ):
-    documents = crud.search_document_summary(db, query=query)
-    return documents
+    return crud.search_document_summary(db, query=query)

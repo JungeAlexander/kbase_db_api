@@ -30,8 +30,7 @@ def read_entities(
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_active_user),
 ):
-    entities = crud.get_entities(db, skip=skip, limit=limit)
-    return entities
+    return crud.get_entities(db, skip=skip, limit=limit)
 
 
 @router.get("/{entity_id}", response_model=schemas.Entity)

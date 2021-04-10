@@ -16,8 +16,7 @@ def read_user_ratings(
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_active_user),
 ):
-    user_ratings = crud.get_user_ratings(db, skip=skip, limit=limit)
-    return user_ratings
+    return crud.get_user_ratings(db, skip=skip, limit=limit)
 
 
 @router.post("/", response_model=schemas.UserRating)
