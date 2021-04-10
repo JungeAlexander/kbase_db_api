@@ -1,3 +1,5 @@
+import os
+
 import fastapi_chameleon
 import uvicorn
 from fastapi import FastAPI
@@ -8,11 +10,15 @@ from starlette.staticfiles import StaticFiles
 from db_api.api.api_v1.api import api_router
 from db_api.core.config import settings
 
+if os.environ.get("AWS_EXECUTION_ENV"):
+    openapi_prefix = f"/{settings.DBAPI_STAGE}"
+else:
+    openapi_prefix = ""
+
 app = FastAPI(
     title="kbase document store",
     description="Retrieve, update, and recommend documents, entities and mentions in kbase.",
-    openapi_prefix=f"/{settings.DBAPI_STAGE}",
-    openapi_url=f"{settings.DBAPI_STAGE}/{settings.API_V1_STR}/openapi.json",
+    openapi_prefix=openapi_prefix,
 )
 
 origins = [
