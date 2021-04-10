@@ -37,8 +37,7 @@ def read_entity_mentions(
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_active_user),
 ):
-    entity_mentions = crud.get_entity_mentions(db, skip=skip, limit=limit)
-    return entity_mentions
+    return crud.get_entity_mentions(db, skip=skip, limit=limit)
 
 
 @router.get("/{entity_mention_id}", response_model=schemas.EntityMention)
