@@ -7,7 +7,7 @@ from db_api import crud, models, schemas
 from db_api.core.config import settings
 from db_api.database import create_session
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="f{settings.API_V1_STR}/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/token")
 
 
 def get_db():
