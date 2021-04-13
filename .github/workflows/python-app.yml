@@ -38,7 +38,9 @@ jobs:
       run: python -m poetry install --no-root
 
     - name: Environment variables
-      run: echo $DEV_ENV_FILE | base64 --decode > source/db_api/aws.env
+      run: |
+        echo $DEV_ENV_FILE | base64 --decode > source/db_api/aws.env
+        head -n 1 source/db_api/aws.env
 
     - name: Test with pytest
       run: |
