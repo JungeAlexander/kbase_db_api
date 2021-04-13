@@ -1284,7 +1284,7 @@ scipy = ["scipy"]
 
 [[package]]
 name = "nmslib"
-version = "2.0.11"
+version = "2.1.1"
 description = "Non-Metric Space Library (NMSLIB)"
 category = "dev"
 optional = false
@@ -1293,7 +1293,7 @@ python-versions = "*"
 [package.dependencies]
 numpy = {version = ">=1.10.0", markers = "python_version >= \"3.5\""}
 psutil = "*"
-pybind11 = ">=2.2.3"
+pybind11 = "<2.6.2"
 
 [[package]]
 name = "nodeenv"
@@ -3008,26 +3008,41 @@ networkx = [
     {file = "networkx-2.5.tar.gz", hash = "sha256:7978955423fbc9639c10498878be59caf99b44dc304c2286162fd24b458c1602"},
 ]
 nmslib = [
-    {file = "nmslib-2.0.11-cp27-cp27m-manylinux2010_x86_64.whl", hash = "sha256:c772bcfe6837a7082552559c6437dcc487afaab97f2533e9a0bc9efec0b2a688"},
-    {file = "nmslib-2.0.11-cp27-cp27mu-manylinux2010_x86_64.whl", hash = "sha256:5d2b652bf32266c574233f54db085bc1798aed790f454bd986c146ef89c4763d"},
-    {file = "nmslib-2.0.11-cp35-cp35m-manylinux1_x86_64.whl", hash = "sha256:d75e504837568cb3b40d0b1d36a43b72744c36ddbec6927b5bbb21a6fe1e2ef8"},
-    {file = "nmslib-2.0.11-cp35-cp35m-manylinux2010_x86_64.whl", hash = "sha256:4563da4dd787ae1d6207101e5634400d28d6c75af9bfe59e9e2fa457d8ff8649"},
-    {file = "nmslib-2.0.11-cp36-cp36m-macosx_10_14_x86_64.whl", hash = "sha256:6d6e1a5a2eaabca36cc44d59638adc903a6f97adbf30e482e75866a4f5b0ff2b"},
-    {file = "nmslib-2.0.11-cp36-cp36m-manylinux1_x86_64.whl", hash = "sha256:7f8fb25b61279dda17b9f2a8f34a55e67c8a03768d7956ac071d364bccf79197"},
-    {file = "nmslib-2.0.11-cp36-cp36m-manylinux2010_x86_64.whl", hash = "sha256:01251f4d9debfb2d5b736656266b01b87f9df1130a0c531d5da66e1f423802c4"},
-    {file = "nmslib-2.0.11-cp36-cp36m-manylinux2014_aarch64.whl", hash = "sha256:30bcf8832223695013a9c57dda7b8cf16de8d3740a26f7c1035605191452104a"},
-    {file = "nmslib-2.0.11-cp37-cp37m-macosx_10_14_x86_64.whl", hash = "sha256:8cbdba5c6c2ec9c39f6d5475ea1ef8ba422f3cec08460ac2c927061e874c47ac"},
-    {file = "nmslib-2.0.11-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:91bee528531b0082cc5c8e05f607e91ad9a7457ab35c712172a2221a7b256f90"},
-    {file = "nmslib-2.0.11-cp37-cp37m-manylinux2010_x86_64.whl", hash = "sha256:9ac7fd193d2a3a2ecdc64d10b72ddb4c5b48ed4719d92512851a622979e571a1"},
-    {file = "nmslib-2.0.11-cp37-cp37m-manylinux2014_aarch64.whl", hash = "sha256:c8e683e6b802fcf5251ee38f77b66584363ebf58e16d7796db939e0aa1901bec"},
-    {file = "nmslib-2.0.11-cp38-cp38-macosx_10_14_x86_64.whl", hash = "sha256:2597d5c6aef128065d84c30b387f5307b2b2385683d989b2366eba8c858c5e13"},
-    {file = "nmslib-2.0.11-cp38-cp38-manylinux1_x86_64.whl", hash = "sha256:f1d1d855214df24a8137854ae832cb28c9433a64191f3a69c8d5dbc0ae52173d"},
-    {file = "nmslib-2.0.11-cp38-cp38-manylinux2010_x86_64.whl", hash = "sha256:23bbae57d53f5c050e3b482131408be3bbd74ac29d3be48924eb7f5b956de4fd"},
-    {file = "nmslib-2.0.11-cp38-cp38-manylinux2014_aarch64.whl", hash = "sha256:e221b2210a2aacab0fa645148d42ea26f4e89815f82a2e9c6583da2a5a2c1542"},
-    {file = "nmslib-2.0.11-cp39-cp39-macosx_10_14_x86_64.whl", hash = "sha256:932f4d7d2d0aa52d48cb08b1054c09c1786bf378a1af4aad68bc1b97139b60ce"},
-    {file = "nmslib-2.0.11-cp39-cp39-manylinux1_x86_64.whl", hash = "sha256:e01af78e7beaba45d9c0907033e979c22831f11c29d45233a06472288805a4d0"},
-    {file = "nmslib-2.0.11-cp39-cp39-manylinux2010_x86_64.whl", hash = "sha256:c9dfa5ddbbcf7a83c3296afc41deef4f53d83b36ec48362679177012491fd01a"},
-    {file = "nmslib-2.0.11-cp39-cp39-manylinux2014_aarch64.whl", hash = "sha256:7cc7f6cddff2aee1e0c9cecde3cc7c1e5f3e7f819ca613f3d53cbc8c672350ed"},
+    {file = "nmslib-2.1.1-cp27-cp27m-macosx_10_14_x86_64.whl", hash = "sha256:495ace1146bb1e89ef585a490fa65de19a87fa0d5bb029f3156402a431fc3558"},
+    {file = "nmslib-2.1.1-cp27-cp27m-macosx_10_15_x86_64.whl", hash = "sha256:c0ae48f01e63e70dc1e45b28cb1b1478ca09588a21127f1d4473afb22ff3bbbc"},
+    {file = "nmslib-2.1.1-cp27-cp27m-manylinux1_x86_64.whl", hash = "sha256:97b3f1af2c163369a043449dec7f05d681aa23c00f9d77bee09fd8f31ba41815"},
+    {file = "nmslib-2.1.1-cp27-cp27m-manylinux2010_x86_64.whl", hash = "sha256:2061e94f980666bffff4f2173bf2b58a763062dee9cedab11ec46001e576c6b5"},
+    {file = "nmslib-2.1.1-cp27-cp27m-win_amd64.whl", hash = "sha256:e8b30bab631258b36e751d217180cdba0d2f942d779d4444cbc57a5173ee19ad"},
+    {file = "nmslib-2.1.1-cp27-cp27mu-manylinux1_x86_64.whl", hash = "sha256:191a23dea20c0ad855e78df41a90273020f76d878c52aa1a80557ca83cf0f392"},
+    {file = "nmslib-2.1.1-cp27-cp27mu-manylinux2010_x86_64.whl", hash = "sha256:eae9a1d640a9e4c52c43272620f54f367f03ce25d8b07218fd90dfc204d5c49d"},
+    {file = "nmslib-2.1.1-cp35-cp35m-macosx_10_14_x86_64.whl", hash = "sha256:c22ffc3376d41b4b4e63d89ec5db2cf2e2051881827d658c94632800bed87e5b"},
+    {file = "nmslib-2.1.1-cp35-cp35m-macosx_10_15_x86_64.whl", hash = "sha256:a1ff4aeb143747106994a68dfcc29b097fc4562f632f2709f8f467b93d7181e2"},
+    {file = "nmslib-2.1.1-cp35-cp35m-manylinux2010_x86_64.whl", hash = "sha256:5ce529d4f9b572135cdc5a18f04d3cbe258f1f440f8a06ab7209428a3b4c30d6"},
+    {file = "nmslib-2.1.1-cp35-cp35m-win_amd64.whl", hash = "sha256:00f5b37305837fd5656ab4a65c4f0c9bc8e44cc9cf77cc9222f4153a72f0c727"},
+    {file = "nmslib-2.1.1-cp36-cp36m-macosx_10_14_x86_64.whl", hash = "sha256:08cb77c3fc2a346edc3407bd985b63a05bd0ec0d6d81ff2c6f7d6eb6bfbdbc1d"},
+    {file = "nmslib-2.1.1-cp36-cp36m-macosx_10_15_x86_64.whl", hash = "sha256:7dcc203450c9d95a551e9564646b9d0179edbde0874373ad63739b7e25a9980c"},
+    {file = "nmslib-2.1.1-cp36-cp36m-manylinux1_x86_64.whl", hash = "sha256:db4b817f0896e0bbc836722c67b51bc237dc79477d2d383ced344d755705d409"},
+    {file = "nmslib-2.1.1-cp36-cp36m-manylinux2010_x86_64.whl", hash = "sha256:1b120f7766a52c4016c6b8889b34d97eddbb60a16fd39eb5a81e73ca101baf3e"},
+    {file = "nmslib-2.1.1-cp36-cp36m-manylinux2014_aarch64.whl", hash = "sha256:9e5cd5d492bf7290adacac797ee092c863d230f3797d0db6a120a1a05c665be2"},
+    {file = "nmslib-2.1.1-cp36-cp36m-win_amd64.whl", hash = "sha256:0a80e574c3e6bfb724dbb77cbaec53cf9f4366382c2c0a9a2f5148c69b646afe"},
+    {file = "nmslib-2.1.1-cp37-cp37m-macosx_10_14_x86_64.whl", hash = "sha256:7b0d916f219b4044cd31e8f6bda92a7f23d68cb3f34f1c7da81e5852702d6ce0"},
+    {file = "nmslib-2.1.1-cp37-cp37m-macosx_10_15_x86_64.whl", hash = "sha256:a2129a7519ab73d3544ab6fa2f6c6c4c54644bf3d1c60d6929dcaac49c9307e6"},
+    {file = "nmslib-2.1.1-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:0f5c1c7e3c398a4ed7eaed65cd91776022b2ca4b8f15e504fa22c89da9333257"},
+    {file = "nmslib-2.1.1-cp37-cp37m-manylinux2010_x86_64.whl", hash = "sha256:c5a644d32ad3b2e24635a839d17d9d53d01a47ca55d1ba0d051f51f49df7e98a"},
+    {file = "nmslib-2.1.1-cp37-cp37m-manylinux2014_aarch64.whl", hash = "sha256:fc75c7e128fd19c21c8cd73a1681a32d902bf5203699321cdfff8cf98607c82d"},
+    {file = "nmslib-2.1.1-cp37-cp37m-win_amd64.whl", hash = "sha256:43118bb64f06e62662a8c7f1fe54ae699a078b438e3f8cb75db547731a5e73f6"},
+    {file = "nmslib-2.1.1-cp38-cp38-macosx_10_14_x86_64.whl", hash = "sha256:1b87f7a5813cabedef47b289337ab1eefa4e62485a05884c2dbe7ba1d9c327a4"},
+    {file = "nmslib-2.1.1-cp38-cp38-macosx_10_15_x86_64.whl", hash = "sha256:ca3d4eb91232078fb96eaa938a4dcbcfb3da48a7800350e1ded70d8d3e6e65a5"},
+    {file = "nmslib-2.1.1-cp38-cp38-manylinux1_x86_64.whl", hash = "sha256:b6ebb53999672abf7811ef35e2ec3d76b2a845fd5dbaa5482e2cc445481d87cf"},
+    {file = "nmslib-2.1.1-cp38-cp38-manylinux2010_x86_64.whl", hash = "sha256:26062f5f172c35038c46feabb5c60c104808c167db0c3dfab19d11eb99f18b85"},
+    {file = "nmslib-2.1.1-cp38-cp38-manylinux2014_aarch64.whl", hash = "sha256:ed63fda2a5572391a0a540689f00d390040b9255e08012ea43344958cea92f36"},
+    {file = "nmslib-2.1.1-cp38-cp38-win_amd64.whl", hash = "sha256:6a3aa123d85c188fc64cb8957e5cdded9c8c57bea2c6a5866fe06c729e6e6e85"},
+    {file = "nmslib-2.1.1-cp39-cp39-macosx_10_14_x86_64.whl", hash = "sha256:3fe5bbf304fdde50f3a55329efcf26d4ba4eb1181885877a1baab1df900dd671"},
+    {file = "nmslib-2.1.1-cp39-cp39-macosx_10_15_x86_64.whl", hash = "sha256:7b5a561a71dce6d56b32ea89a591dbe477b4173fbc3e9a1153d534bc248ae7b5"},
+    {file = "nmslib-2.1.1-cp39-cp39-manylinux1_x86_64.whl", hash = "sha256:82680077a06a817df95ea716260231245cf077a4c08b0f39148d4a58d2eb58f2"},
+    {file = "nmslib-2.1.1-cp39-cp39-manylinux2010_x86_64.whl", hash = "sha256:be54644e1a1a6e2539e565fe24415997f18656a5260276c40266cacb70e2a9ab"},
+    {file = "nmslib-2.1.1-cp39-cp39-manylinux2014_aarch64.whl", hash = "sha256:3681e3e9160fa9661192c19202402e22151e016cf365621609ae5ca4a4677d21"},
+    {file = "nmslib-2.1.1.tar.gz", hash = "sha256:971294a7766f91c697d63c88c8adda4797a944346cc535a217393f4167a19c20"},
 ]
 nodeenv = [
     {file = "nodeenv-1.5.0-py2.py3-none-any.whl", hash = "sha256:5304d424c529c997bc888453aeaa6362d242b6b4631e90f3d4bf1b290f1c84a9"},
