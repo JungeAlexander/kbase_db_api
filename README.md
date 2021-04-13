@@ -32,6 +32,7 @@ https://github.com/tiangolo/full-stack-fastapi-postgresql
 ### Pytest
 
 ```
+cd source
 poetry run pytest -v tests
 ```
 
