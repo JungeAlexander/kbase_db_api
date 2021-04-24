@@ -36,7 +36,7 @@ app.add_middleware(
 )
 
 
-handler = Mangum(app, enable_lifespan=False)
+handler = Mangum(app, lifespan="off")
 
 
 def main():
