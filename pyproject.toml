@@ -28,6 +28,7 @@ python-multipart = "^0.0.5"
 cryptography = "^3.4.5"
 fastapi-chameleon = {git = "https://github.com/JungeAlexander/fastapi-chameleon.git", rev = "main"}
 aiofiles = "^0.6.0"
+SQLAlchemy = "1.4.11"
 
 [tool.poetry.dev-dependencies]
 spacy = "^2.3.2"
