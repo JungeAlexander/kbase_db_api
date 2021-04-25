@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from db_api import crud, models, schemas
 from db_api.core.config import settings
-from db_api.database import create_session
+from db_api.database import create_async_session, create_session
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/token")
 
@@ -17,6 +17,15 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+async def get_db_async():
+    db = None
+    try:
+        db = create_async_session()
+        yield db
+    finally:
+        await db.close()
 
 
 def get_current_user(
