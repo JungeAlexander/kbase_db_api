@@ -1,5 +1,5 @@
 from contextlib import asynccontextmanager, contextmanager
-from typing import Optional
+from typing import Callable, Optional
 
 from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
@@ -10,7 +10,7 @@ from db_api.core.config import settings
 
 SqlAlchemyBase = declarative_base()
 
-SessionLocal = None
+SessionLocal: Optional[Callable[[], Session]] = None
 
 AsyncEngineLocal: Optional[AsyncEngine] = None
 
