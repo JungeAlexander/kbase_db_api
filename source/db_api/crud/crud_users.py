@@ -1,5 +1,7 @@
-from typing import Iterable
+from typing import Iterable, Optional
 
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
 from sqlalchemy.orm import Session
 
 from db_api import models, schemas
@@ -38,16 +40,22 @@ def get_user_by_email(db: Session, email: str) -> models.User:
     return db.query(models.User).filter(models.User.email == email).first()
 
 
-def get_user_by_username(db: Session, username: str) -> models.User:
-    return db.query(models.User).filter(models.User.username == username).first()
+async def get_user_by_username(
+    db: AsyncSession, username: str
+) -> Optional[models.User]:
+    query = select(models.User).filter(models.User.username == username)
+    result = await db.execute(query)
+    return result.scalar_one_or_none()
 
 
 def get_users(db: Session, skip: int = 0, limit: int = 100) -> Iterable[models.User]:
     return db.query(models.User).offset(skip).limit(limit).all()
 
 
-def authenticate_user(db: Session, username: str, password: str) -> models.User:
-    user = get_user_by_username(db, username=username)
+async def authenticate_user(
+    db: AsyncSession, username: str, password: str
+) -> Optional[models.User]:
+    user = await get_user_by_username(db, username=username)
     if not user:
         return None
     if not security.verify_password(password, user.hashed_password):
