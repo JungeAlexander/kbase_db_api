@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 from db_api import crud, models, schemas
 from db_api.api import deps
+from db_api.core.config import settings
 
 router = APIRouter()
 
@@ -13,6 +14,11 @@ router = APIRouter()
 @router.get("/me", response_model=schemas.User)
 def read_users_me(current_user: schemas.User = Depends(deps.get_current_active_user)):
     return current_user
+
+
+@router.get("/ping")
+def pong():
+    return {"ping": settings.TESTING}
 
 
 @router.post("/", response_model=schemas.User)

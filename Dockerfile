@@ -1,7 +1,7 @@
 FROM tiangolo/uvicorn-gunicorn-fastapi:python3.8-slim
 
-COPY requirements.txt /
+COPY ./source/requirements.txt /
 RUN pip install --upgrade pip
 RUN pip install -r /requirements.txt
 
-COPY ./db_api /app/app
+COPY ./source/db_api /app/db_api
