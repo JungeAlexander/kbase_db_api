@@ -10,7 +10,7 @@ class _Settings(BaseSettings):
     JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int
 
     HOST: str
-    PORT: str
+    PSQL_PORT: str
     DBNAME: str
     DBUSER: str
     DBPASSWORD: str
@@ -20,6 +20,8 @@ class _Settings(BaseSettings):
     FIRST_SUPERUSER_PASSWORD: str
 
     DBAPI_STAGE: str
+
+    TESTING: int = int(os.getenv("TESTING", 0))
 
     API_V1_STR: str = "/api/v1"
 
@@ -35,7 +37,7 @@ class _Settings(BaseSettings):
             password=values.get("DBPASSWORD"),
             host=values.get("HOST"),
             path=f"/{values.get('DBNAME') or ''}",
-            port=values.get("PORT"),
+            port=values.get("PSQL_PORT"),
         )
 
     class Config:
