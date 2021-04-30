@@ -7,6 +7,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from db_api.api.api_v1.api import api_router
 from db_api.core.config import settings
+from db_api.database import setup
 
 if os.environ.get("AWS_EXECUTION_ENV"):
     openapi_prefix = f"/{settings.DBAPI_STAGE}"
@@ -42,6 +43,7 @@ def main():
 
 
 def configure():
+    setup()
     configure_routes()
 
 

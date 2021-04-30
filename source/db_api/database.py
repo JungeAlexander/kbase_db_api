@@ -1,6 +1,8 @@
-from contextlib import contextmanager
+from contextlib import asynccontextmanager, contextmanager
+from typing import Callable, Optional
 
 from sqlalchemy import create_engine
+from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session, sessionmaker
 
@@ -8,17 +10,22 @@ from db_api.core.config import settings
 
 SqlAlchemyBase = declarative_base()
 
-SessionLocal = None
+SessionLocal: Optional[Callable[[], Session]] = None
+
+AsyncEngineLocal: Optional[AsyncEngine] = None
 
 
 def setup():
     global SessionLocal
+    global AsyncEngineLocal
 
     if SessionLocal:
         return
 
     engine = create_engine(settings.SQLALCHEMY_DATABASE_URI)
     SessionLocal = sessionmaker(bind=engine)
+
+    AsyncEngineLocal = create_async_engine(settings.SQLALCHEMY_DATABASE_URI)
 
     # noinspection PyUnresolvedReferences
     from . import models  # noqa: F401
@@ -60,6 +67,19 @@ def create_session() -> Session:
     return session
 
 
+def create_async_session() -> AsyncSession:
+    global AsyncEngineLocal
+
+    if AsyncEngineLocal is None:
+        setup()
+
+    session: AsyncSession = AsyncSession(AsyncEngineLocal)
+
+    session.sync_session.expire_on_commit = False
+
+    return session
+
+
 @contextmanager
 def session_scope():
     """Provide a transactional scope around a series of operations."""
@@ -78,3 +98,23 @@ def session_scope():
         raise
     finally:
         session.close()
+
+
+@asynccontextmanager
+async def async_session_scope():
+    """Provide a transactional async scope around a series of operations."""
+    global AsyncEngineLocal
+
+    if AsyncEngineLocal is None:
+        setup()
+
+    session: AsyncSession = AsyncSession(AsyncEngineLocal)
+
+    try:
+        yield session
+        await session.commit()
+    except:  # noqa: E722
+        await session.rollback()
+        raise
+    finally:
+        await session.close()

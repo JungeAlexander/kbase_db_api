@@ -1,16 +1,17 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
 
 from db_api import crud, models, schemas
 from db_api.core.config import settings
-from db_api.database import create_session
+from db_api.database import create_async_session, create_session
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/token")
 
 
-def get_db():
+def get_db() -> Session:
     db = None
     try:
         db = create_session()
@@ -19,8 +20,17 @@ def get_db():
         db.close()
 
 
-def get_current_user(
-    token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
+async def get_db_async() -> AsyncSession:
+    db = None
+    try:
+        db = create_async_session()
+        yield db
+    finally:
+        await db.close()
+
+
+async def get_current_user(
+    token: str = Depends(oauth2_scheme), db: AsyncSession = Depends(get_db_async)
 ) -> models.User:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -37,13 +47,13 @@ def get_current_user(
         token_data = schemas.TokenData(username=username)
     except JWTError:
         raise credentials_exception
-    db_user = crud.get_user_by_username(db, username=token_data.username)
+    db_user = await crud.get_user_by_username(db, username=token_data.username)
     if db_user is None:
         raise credentials_exception
     return db_user
 
 
-def get_current_active_user(
+async def get_current_active_user(
     current_user: schemas.User = Depends(get_current_user),
 ) -> models.User:
     if not current_user.is_active:
@@ -51,7 +61,7 @@ def get_current_active_user(
     return current_user
 
 
-def get_current_active_superuser(
+async def get_current_active_superuser(
     current_user: schemas.User = Depends(get_current_user),
 ) -> models.User:
     if not current_user.is_superuser:

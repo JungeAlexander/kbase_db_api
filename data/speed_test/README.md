@@ -1,16 +1,39 @@
-# Sync
+# Speed test with wrk
 
-# Async
+## Sync
 
-`wrk -t12 -c400 -d60s -spost.lua http://127.0.0.1:8000/api/v1/token`
+```
+wrk -t4 -c50 -d60s -spost.lua http://127.0.0.1:8000/api/v1/token
+```
 
+```
 Running 1m test @ http://127.0.0.1:8000/api/v1/token
-  12 threads and 400 connections
+  4 threads and 50 connections
   Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency     1.17s   512.82ms   1.99s    68.00%
-    Req/Sec     5.37     19.42   202.00     95.12%
-  522 requests in 1.00m, 95.23KB read
-  Socket errors: connect 155, read 284647, write 0, timeout 472
-  Non-2xx or 3xx responses: 522
-Requests/sec:      8.69
-Transfer/sec:      1.58KB
+    Latency     1.44s   224.24ms   1.83s    75.00%
+    Req/Sec     3.49      6.78    40.00     97.56%
+  62 requests in 1.00m, 12.00KB read
+  Socket errors: connect 0, read 12, write 0, timeout 46
+  Non-2xx or 3xx responses: 62
+Requests/sec:      1.03
+Transfer/sec:     204.48B
+```
+
+
+## Async
+
+```
+wrk -t4 -c50 -d60s -spost.lua http://127.0.0.1:8000/api/v1/token
+```
+
+```
+Running 1m test @ http://127.0.0.1:8000/api/v1/token
+  4 threads and 50 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   629.18ms  132.98ms   1.65s    89.67%
+    Req/Sec    19.77     10.88    80.00     86.04%
+  4565 requests in 1.00m, 0.89MB read
+  Non-2xx or 3xx responses: 4565
+Requests/sec:     75.96
+Transfer/sec:     15.13KB
+```
