@@ -8,7 +8,7 @@ from db_api import models, schemas
 from db_api.core import security
 
 
-def create_user(db: Session, user: schemas.UserCreate) -> models.User:
+async def create_user(db: AsyncSession, user: schemas.UserCreate) -> models.User:
     hashed_password = security.get_password_hash(user.password)
     db_user = models.User(
         email=user.email,
@@ -17,27 +17,31 @@ def create_user(db: Session, user: schemas.UserCreate) -> models.User:
         is_superuser=user.is_superuser,
     )
     db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
+    await db.commit()
+    await db.refresh(db_user)
     return db_user
 
 
-def update_user(db: Session, user: schemas.UserUpdate) -> models.User:
-    old_user = get_user_by_email(db, user.email)
+async def update_user(db: AsyncSession, user: schemas.UserUpdate) -> models.User:
+    old_user = await get_user_by_email(db, user.email)
     new_user = models.User(id=old_user.id, **user.dict())
-    db.delete(old_user)
+    await db.delete(old_user)
     db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
+    await db.commit()
+    await db.refresh(new_user)
     return new_user
 
 
-def get_user(db: Session, user_id: int) -> models.User:
-    return db.query(models.User).filter(models.User.id == user_id).first()
+async def get_user(db: AsyncSession, user_id: int) -> Optional[models.User]:
+    query = select(models.User).filter(models.User.id == user_id)
+    result = await db.execute(query)
+    return result.scalar_one_or_none()
 
 
-def get_user_by_email(db: Session, email: str) -> models.User:
-    return db.query(models.User).filter(models.User.email == email).first()
+async def get_user_by_email(db: AsyncSession, email: str) -> Optional[models.User]:
+    query = select(models.User).filter(models.User.email == email)
+    result = await db.execute(query)
+    return result.scalar_one_or_none()
 
 
 async def get_user_by_username(
